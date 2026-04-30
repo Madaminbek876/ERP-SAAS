@@ -1,0 +1,107 @@
+<svg width="420" height="520" viewBox="0 0 420 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgPanel" x1="58" y1="34" x2="366" y2="468" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity="0.2"/>
+      <stop offset="1" stop-color="#DCE9FF" stop-opacity="0.08"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="92" y1="122" x2="329" y2="370" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#102452"/>
+      <stop offset="1" stop-color="#234BB4"/>
+    </linearGradient>
+    <linearGradient id="cardA" x1="95" y1="130" x2="171" y2="196" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7CD8FF"/>
+      <stop offset="1" stop-color="#4C86FF"/>
+    </linearGradient>
+    <linearGradient id="cardB" x1="182" y1="130" x2="258" y2="196" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8AF0C6"/>
+      <stop offset="1" stop-color="#22B67B"/>
+    </linearGradient>
+    <linearGradient id="cardC" x1="269" y1="130" x2="345" y2="196" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFCCA2"/>
+      <stop offset="1" stop-color="#F08A3C"/>
+    </linearGradient>
+    <radialGradient id="glowTop" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(132 120) rotate(59.7603) scale(136.803 161.894)">
+      <stop stop-color="#78CCFF" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#78CCFF" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowBottom" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(315 385) rotate(126.384) scale(134.255 132.46)">
+      <stop stop-color="#8D9FFF" stop-opacity="0.46"/>
+      <stop offset="1" stop-color="#8D9FFF" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="shadow" x="18" y="16" width="384" height="490" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="18"/>
+      <feGaussianBlur stdDeviation="20"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.0666667 0 0 0 0 0.129412 0 0 0 0 0.309804 0 0 0 0.24 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_erp_alt"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_erp_alt" result="shape"/>
+    </filter>
+  </defs>
+
+  <rect width="420" height="520" rx="38" fill="transparent"/>
+  <ellipse cx="132" cy="120" rx="106" ry="122" fill="url(#glowTop)"/>
+  <ellipse cx="315" cy="385" rx="112" ry="104" fill="url(#glowBottom)"/>
+
+  <g filter="url(#shadow)">
+    <rect x="58" y="34" width="304" height="430" rx="34" fill="url(#bgPanel)"/>
+    <rect x="58.75" y="34.75" width="302.5" height="428.5" rx="33.25" stroke="white" stroke-opacity="0.16" stroke-width="1.5"/>
+  </g>
+
+  <rect x="82" y="58" width="256" height="24" rx="12" fill="white" fill-opacity="0.08"/>
+  <circle cx="100" cy="70" r="4" fill="#7CD8FF"/>
+  <circle cx="115" cy="70" r="4" fill="#8AF0C6"/>
+  <circle cx="130" cy="70" r="4" fill="#F5A35D"/>
+  <rect x="156" y="65" width="78" height="10" rx="5" fill="white" fill-opacity="0.14"/>
+  <rect x="244" y="65" width="62" height="10" rx="5" fill="white" fill-opacity="0.09"/>
+
+  <g filter="url(#shadow)">
+    <rect x="82" y="106" width="256" height="194" rx="30" fill="url(#screen)"/>
+    <rect x="82.75" y="106.75" width="254.5" height="192.5" rx="29.25" stroke="white" stroke-opacity="0.12" stroke-width="1.5"/>
+  </g>
+
+  <text x="103" y="133" fill="white" fill-opacity="0.64" font-family="Poppins, Arial, sans-serif" font-size="11" font-weight="700" letter-spacing="0.18em">ERP DASHBOARD</text>
+
+  <rect x="95" y="145" width="72" height="54" rx="18" fill="url(#cardA)"/>
+  <rect x="174" y="145" width="72" height="54" rx="18" fill="url(#cardB)"/>
+  <rect x="253" y="145" width="72" height="54" rx="18" fill="url(#cardC)"/>
+
+  <rect x="107" y="157" width="29" height="8" rx="4" fill="white" fill-opacity="0.64"/>
+  <rect x="107" y="171" width="18" height="14" rx="7" fill="white" fill-opacity="0.88"/>
+  <rect x="186" y="157" width="25" height="8" rx="4" fill="white" fill-opacity="0.64"/>
+  <path d="M187 183L196 173L203 179L214 165" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="265" y="157" width="24" height="8" rx="4" fill="white" fill-opacity="0.64"/>
+  <circle cx="283" cy="177" r="9" fill="white" fill-opacity="0.88"/>
+
+  <rect x="98" y="218" width="227" height="68" rx="20" fill="white" fill-opacity="0.08"/>
+  <text x="116" y="238" fill="white" fill-opacity="0.62" font-family="Poppins, Arial, sans-serif" font-size="11" font-weight="700" letter-spacing="0.16em">CONNECTED FLOW</text>
+  <path d="M116 263H180" stroke="#7CD8FF" stroke-width="4" stroke-linecap="round"/>
+  <path d="M190 263H233" stroke="#8AF0C6" stroke-width="4" stroke-linecap="round"/>
+  <path d="M243 263H304" stroke="#F5A35D" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="148" cy="263" r="13" fill="#214FB2"/>
+  <circle cx="211" cy="263" r="13" fill="#17956A"/>
+  <circle cx="274" cy="263" r="13" fill="#F08A3C"/>
+  <path d="M159 263H169" stroke="white" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M222 263H232" stroke="white" stroke-width="2.6" stroke-linecap="round"/>
+  <path d="M285 263H295" stroke="white" stroke-width="2.6" stroke-linecap="round"/>
+
+  <g filter="url(#shadow)">
+    <rect x="82" y="320" width="122" height="112" rx="24" fill="white" fill-opacity="0.12"/>
+    <rect x="216" y="320" width="122" height="112" rx="24" fill="white" fill-opacity="0.12"/>
+  </g>
+
+  <text x="100" y="346" fill="white" fill-opacity="0.7" font-family="Poppins, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="0.14em">OPERATIONS</text>
+  <rect x="100" y="360" width="86" height="10" rx="5" fill="white" fill-opacity="0.14"/>
+  <rect x="100" y="380" width="52" height="10" rx="5" fill="#7CD8FF"/>
+  <rect x="100" y="396" width="76" height="10" rx="5" fill="#8AF0C6"/>
+  <rect x="100" y="412" width="61" height="10" rx="5" fill="#F5A35D"/>
+
+  <text x="234" y="346" fill="white" fill-opacity="0.7" font-family="Poppins, Arial, sans-serif" font-size="12" font-weight="700" letter-spacing="0.14em">TEAM + FINANCE</text>
+  <circle cx="249" cy="388" r="16" fill="#7CD8FF" fill-opacity="0.85"/>
+  <circle cx="277" cy="375" r="13" fill="#8AF0C6" fill-opacity="0.9"/>
+  <circle cx="304" cy="391" r="18" fill="#F5A35D" fill-opacity="0.88"/>
+  <rect x="236" y="412" width="78" height="10" rx="5" fill="white" fill-opacity="0.16"/>
+  <rect x="236" y="428" width="52" height="10" rx="5" fill="white" fill-opacity="0.1"/>
+
+  <rect x="110" y="455" width="200" height="8" rx="4" fill="white" fill-opacity="0.08"/>
+</svg>

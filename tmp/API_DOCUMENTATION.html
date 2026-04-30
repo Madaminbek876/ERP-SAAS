@@ -1,0 +1,2702 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ERP API Documentation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #1a1a2e;
+    background: #fff;
+    padding: 20px 30px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  
+  h1 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0d1b2a;
+    border-bottom: 3px solid #2563eb;
+    padding-bottom: 8px;
+    margin: 20px 0 14px 0;
+    page-break-before: always;
+  }
+  h1:first-of-type { page-break-before: avoid; }
+  
+  h2 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e3a5f;
+    border-left: 4px solid #2563eb;
+    padding-left: 10px;
+    margin: 18px 0 10px 0;
+  }
+  
+  h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: #2563eb;
+    margin: 14px 0 6px 0;
+    background: #eff6ff;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  
+  h4 {
+    font-size: 12px;
+    font-weight: 600;
+    color: #374151;
+    margin: 10px 0 4px 0;
+  }
+  
+  p { margin: 6px 0; }
+  
+  code {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    background: #f1f5f9;
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: #c2185b;
+    border: 1px solid #e2e8f0;
+  }
+  
+  pre {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 12px 14px;
+    border-radius: 6px;
+    overflow-x: auto;
+    margin: 8px 0;
+    font-size: 10.5px;
+    line-height: 1.5;
+    border-left: 3px solid #2563eb;
+  }
+  
+  pre code {
+    background: transparent;
+    color: #e2e8f0;
+    border: none;
+    padding: 0;
+    font-size: 10.5px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0;
+    font-size: 11px;
+  }
+  
+  th {
+    background: #1e3a5f;
+    color: #fff;
+    padding: 7px 10px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 11px;
+  }
+  
+  td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #e2e8f0;
+    vertical-align: top;
+  }
+  
+  tr:nth-child(even) td { background: #f8fafc; }
+  tr:hover td { background: #eff6ff; }
+  
+  blockquote {
+    background: #fffbeb;
+    border-left: 4px solid #f59e0b;
+    padding: 8px 12px;
+    margin: 8px 0;
+    border-radius: 0 4px 4px 0;
+    font-size: 11px;
+    color: #78350f;
+  }
+  
+  hr {
+    border: none;
+    border-top: 1px solid #e2e8f0;
+    margin: 16px 0;
+  }
+  
+  ul, ol {
+    padding-left: 20px;
+    margin: 6px 0;
+  }
+  
+  li { margin: 2px 0; }
+  
+  strong { font-weight: 600; color: #111827; }
+  
+  .page-break { page-break-before: always; }
+  
+  @media print {
+    body { padding: 15px; }
+    pre { white-space: pre-wrap; word-break: break-word; }
+    h1 { page-break-before: always; }
+    h1:first-child { page-break-before: avoid; }
+  }
+</style>
+</head>
+<body>
+<h1 id="erp-system-frontend-api-qollanmasi">ERP SYSTEM — FRONTEND API QO'LLANMASI</h1>
+<p><strong>Versiya:</strong> v1
+<strong>Base URL:</strong> <code>http://&lt;server&gt;/api/v1/</code>
+<strong>Swagger UI:</strong> <code>http://&lt;server&gt;/swagger/</code>
+<strong>ReDoc:</strong> <code>http://&lt;server&gt;/redoc/</code></p>
+<hr />
+<h2 id="umumiy-qoidalar">UMUMIY QOIDALAR</h2>
+<h3 id="autentifikatsiya">Autentifikatsiya</h3>
+<p>Barcha endpointlar (login va token/refresh bundan mustasno) <code>Authorization</code> headeri talab qiladi:</p>
+<pre class="codehilite"><code>Authorization: Bearer &lt;access_token&gt;
+</code></pre>
+
+<h3 id="pagination-sahifalash">Pagination (sahifalash)</h3>
+<p>Ro'yxat (list) endpointlari sahifalangan javob qaytaradi:</p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;count&quot;: 150,
+  &quot;next&quot;: &quot;http://&lt;server&gt;/api/v1/orders/?page=2&quot;,
+  &quot;previous&quot;: null,
+  &quot;results&quot;: [ ... ]
+}
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Parametr</th>
+<th>Turi</th>
+<th>Tavsif</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>page</code></td>
+<td>integer</td>
+<td>Sahifa raqami (default: 1)</td>
+</tr>
+<tr>
+<td><code>page_size</code></td>
+<td>integer</td>
+<td>Har sahifadagi yozuvlar (default: 20)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Misol:</strong> <code>GET /api/v1/orders/?page=2&amp;page_size=10</code></p>
+<h3 id="qidiruv-va-tartib">Qidiruv va Tartib</h3>
+<pre class="codehilite"><code>?search=qidiruv_matni       # matnli qidiruv
+?ordering=field_name        # o'suvchi tartib
+?ordering=-field_name       # kamayuvchi tartib
+</code></pre>
+
+<h3 id="xatolik-formatlari">Xatolik formatlari</h3>
+<pre class="codehilite"><code class="language-json">{ &quot;detail&quot;: &quot;Not found.&quot; }
+{ &quot;field_name&quot;: [&quot;Xatolik matni.&quot;] }
+{ &quot;non_field_errors&quot;: [&quot;Xatolik matni.&quot;] }
+</code></pre>
+
+<h3 id="http-status-kodlari">HTTP Status kodlari</h3>
+<table>
+<thead>
+<tr>
+<th>Kod</th>
+<th>Tavsif</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>200</td>
+<td>Muvaffaqiyatli (GET/PATCH)</td>
+</tr>
+<tr>
+<td>201</td>
+<td>Yaratildi (POST)</td>
+</tr>
+<tr>
+<td>204</td>
+<td>O'chirildi (DELETE)</td>
+</tr>
+<tr>
+<td>400</td>
+<td>Validatsiya xatosi</td>
+</tr>
+<tr>
+<td>401</td>
+<td>Autentifikatsiya xatosi</td>
+</tr>
+<tr>
+<td>403</td>
+<td>Ruxsat yo'q</td>
+</tr>
+<tr>
+<td>404</td>
+<td>Topilmadi</td>
+</tr>
+<tr>
+<td>409</td>
+<td>Konflikt (bog'liq yozuvlar bor)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="enum-qiymatlar-barcha-bolimda-ishlatiladi">Enum qiymatlar (barcha bo'limda ishlatiladi)</h3>
+<p><strong>CurrencyCode:</strong> <code>UZS</code></p>
+<p><strong>PaymentMethod:</strong> <code>CASH</code> | <code>BANK_TRANSFER</code> | <code>CARD</code></p>
+<p><strong>PaymentStatus:</strong> <code>UNPAID</code> | <code>PARTIAL</code> | <code>PAID</code></p>
+<p><strong>ItemType:</strong> <code>RAW_MATERIAL</code> | <code>FINISHED_PRODUCT</code></p>
+<p><strong>StockMovementType:</strong> <code>IN</code> | <code>OUT</code> | <code>WASTE</code> | <code>ADJUST</code> | <code>RETURN</code></p>
+<p><strong>KontragentKind:</strong> <code>SUPPLIER</code> | <code>CLIENT</code> | <code>BOTH</code></p>
+<hr />
+<h2 id="1-accounts-autentifikatsiya">1. ACCOUNTS (Autentifikatsiya)</h2>
+<p><strong>Base:</strong> <code>/api/v1/accounts/</code></p>
+<hr />
+<h3 id="11-login">1.1 Login</h3>
+<pre class="codehilite"><code>POST /api/v1/accounts/login/
+</code></pre>
+
+<p><strong>Auth:</strong> Shart emas
+<strong>Throttle:</strong> 10 ta so'rov/minut</p>
+<p><strong>Request body:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;username&quot;: &quot;admin&quot;,
+  &quot;password&quot;: &quot;secret123&quot;
+}
+</code></pre>
+
+<p><strong>Response 200:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;access&quot;:  &quot;eyJhbGci....&quot;,
+  &quot;refresh&quot;: &quot;eyJhbGci....&quot;
+}
+</code></pre>
+
+<blockquote>
+<p><code>access</code> tokeni 60 daqiqa, <code>refresh</code> tokeni 7 kun amal qiladi.</p>
+</blockquote>
+<hr />
+<h3 id="12-token-yangilash">1.2 Token yangilash</h3>
+<pre class="codehilite"><code>POST /api/v1/accounts/token/refresh/
+</code></pre>
+
+<p><strong>Auth:</strong> Shart emas
+<strong>Throttle:</strong> 20 ta so'rov/minut</p>
+<p><strong>Request body:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;refresh&quot;: &quot;eyJhbGci....&quot;
+}
+</code></pre>
+
+<p><strong>Response 200:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;access&quot;:  &quot;eyJhbGci....&quot;,
+  &quot;refresh&quot;: &quot;eyJhbGci....&quot;
+}
+</code></pre>
+
+<blockquote>
+<p><code>ROTATE_REFRESH_TOKENS=True</code> — har safar yangi refresh token beriladi, eski blacklist bo'ladi.</p>
+</blockquote>
+<hr />
+<h3 id="13-profil-korish">1.3 Profil ko'rish</h3>
+<pre class="codehilite"><code>GET /api/v1/accounts/me/
+</code></pre>
+
+<p><strong>Auth:</strong> Majburiy</p>
+<p><strong>Response 200:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;id&quot;: 1,
+  &quot;username&quot;: &quot;admin&quot;,
+  &quot;full_name&quot;: &quot;Alisher Rahimov&quot;,
+  &quot;phone&quot;: &quot;+998901234567&quot;,
+  &quot;avatar&quot;: &quot;http://&lt;server&gt;/media/avatars/photo.jpg&quot;,
+  &quot;admin_role&quot;: true,
+  &quot;is_active&quot;: true
+}
+</code></pre>
+
+<hr />
+<h3 id="14-profilni-yangilash">1.4 Profilni yangilash</h3>
+<pre class="codehilite"><code>PATCH /api/v1/accounts/me/
+Content-Type: application/json  yoki  multipart/form-data
+</code></pre>
+
+<p><strong>Auth:</strong> Majburiy</p>
+<p><strong>Request body (faqat o'zgartiriladigan fieldlar):</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;username&quot;: &quot;new_name&quot;,
+  &quot;full_name&quot;: &quot;Yangi Ism&quot;,
+  &quot;phone&quot;: &quot;+998901112233&quot;,
+  &quot;avatar&quot;: &lt;file&gt;
+}
+</code></pre>
+
+<p><strong>Response 200:</strong> Yangilangan profil (1.3 dagi kabi)</p>
+<hr />
+<h3 id="15-parol-ozgartirish">1.5 Parol o'zgartirish</h3>
+<pre class="codehilite"><code>POST /api/v1/accounts/change-password/
+</code></pre>
+
+<p><strong>Auth:</strong> Majburiy</p>
+<p><strong>Request body:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;old_password&quot;: &quot;secret123&quot;,
+  &quot;new_password&quot;: &quot;NewPass456!&quot;,
+  &quot;new_password2&quot;: &quot;NewPass456!&quot;
+}
+</code></pre>
+
+<p><strong>Response 200:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;detail&quot;: &quot;Password updated successfully.&quot;
+}
+</code></pre>
+
+<blockquote>
+<p>Parol o'zgartirilganda barcha mavjud refresh tokenlar bekor qilinadi.</p>
+</blockquote>
+<hr />
+<h3 id="16-logout">1.6 Logout</h3>
+<pre class="codehilite"><code>POST /api/v1/accounts/logout/
+</code></pre>
+
+<p><strong>Auth:</strong> Majburiy</p>
+<p><strong>Request body:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;refresh&quot;: &quot;eyJhbGci....&quot;
+}
+</code></pre>
+
+<p><strong>Response 205:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;detail&quot;: &quot;Logout successful&quot;
+}
+</code></pre>
+
+<hr />
+<h2 id="2-dictionaries-lugatlar">2. DICTIONARIES (Lug'atlar)</h2>
+<p><strong>Base:</strong> <code>/api/v1/dicts/</code></p>
+<p>Barcha dict endpointlari bir xil tuzilmaga ega. PUT yo'q — faqat PATCH.</p>
+<hr />
+<h3 id="21-olchov-birliklari-uom">2.1 O'lchov Birliklari (UOM)</h3>
+<p><strong>Base:</strong> <code>/api/v1/dicts/uom/</code></p>
+<p><strong>GET List:</strong></p>
+<pre class="codehilite"><code>GET /api/v1/dicts/uom/
+</code></pre>
+
+<p><strong>Query parametrlar:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parametr</th>
+<th>Turi</th>
+<th>Tavsif</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>search</code></td>
+<td>string</td>
+<td><code>code</code> yoki <code>name</code> bo'yicha</td>
+</tr>
+<tr>
+<td><code>ordering</code></td>
+<td>string</td>
+<td><code>id</code>, <code>code</code>, <code>created_at</code></td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>int</td>
+<td>Sahifa raqami</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response 200:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;count&quot;: 10,
+  &quot;next&quot;: null,
+  &quot;previous&quot;: null,
+  &quot;results&quot;: [
+    { &quot;id&quot;: 1, &quot;code&quot;: &quot;KG&quot;, &quot;name&quot;: &quot;Kilogramm&quot; },
+    { &quot;id&quot;: 2, &quot;code&quot;: &quot;PCS&quot;, &quot;name&quot;: &quot;Dona&quot; }
+  ]
+}
+</code></pre>
+
+<p><strong>GET Detail:</strong></p>
+<pre class="codehilite"><code>GET /api/v1/dicts/uom/{id}/
+</code></pre>
+
+<p><strong>Response 200:</strong></p>
+<pre class="codehilite"><code class="language-json">{ &quot;id&quot;: 1, &quot;code&quot;: &quot;KG&quot;, &quot;name&quot;: &quot;Kilogramm&quot; }
+</code></pre>
+
+<p><strong>POST Create:</strong></p>
+<pre class="codehilite"><code>POST /api/v1/dicts/uom/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{ &quot;code&quot;: &quot;M2&quot;, &quot;name&quot;: &quot;Kvadrat metr&quot; }
+</code></pre>
+
+<p><strong>Response 201:</strong></p>
+<pre class="codehilite"><code class="language-json">{ &quot;id&quot;: 5, &quot;code&quot;: &quot;M2&quot;, &quot;name&quot;: &quot;Kvadrat metr&quot; }
+</code></pre>
+
+<p><strong>PATCH Update:</strong></p>
+<pre class="codehilite"><code>PATCH /api/v1/dicts/uom/{id}/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{ &quot;name&quot;: &quot;Yangi nom&quot; }
+</code></pre>
+
+<p><strong>DELETE:</strong></p>
+<pre class="codehilite"><code>DELETE /api/v1/dicts/uom/{id}/
+</code></pre>
+
+<p><strong>Response 204</strong> — muvaffaqiyatli
+<strong>Response 409</strong> — boshqa ma'lumotlarda ishlatilmoqda</p>
+<hr />
+<h3 id="22-material-turlari">2.2 Material Turlari</h3>
+<p><strong>Base:</strong> <code>/api/v1/dicts/material-types/</code></p>
+<p>Xuddi UOM bilan bir xil tuzilma.</p>
+<p><strong>Fields:</strong> <code>id</code>, <code>code</code>, <code>name</code></p>
+<hr />
+<h3 id="23-mahsulot-kategoriyalari">2.3 Mahsulot Kategoriyalari</h3>
+<p><strong>Base:</strong> <code>/api/v1/dicts/product-categories/</code></p>
+<p><strong>Fields:</strong> <code>id</code>, <code>code</code>, <code>name</code></p>
+<hr />
+<h3 id="24-ombor-lokatsiyalari">2.4 Ombor Lokatsiyalari</h3>
+<p><strong>Base:</strong> <code>/api/v1/dicts/locations/</code></p>
+<p><strong>Fields:</strong> <code>id</code>, <code>code</code>, <code>name</code></p>
+<hr />
+<h2 id="3-partners-hamkorlar">3. PARTNERS (Hamkorlar)</h2>
+<p><strong>Base:</strong> <code>/api/v1/partners/</code></p>
+<hr />
+<h3 id="31-kontragentlar">3.1 Kontragentlar</h3>
+<p><strong>Base:</strong> <code>/api/v1/partners/kontragents/</code></p>
+<p><strong>GET List:</strong></p>
+<pre class="codehilite"><code>GET /api/v1/partners/kontragents/
+</code></pre>
+
+<p><strong>Query parametrlar:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parametr</th>
+<th>Turi</th>
+<th>Qiymatlar</th>
+<th>Tavsif</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>search</code></td>
+<td>string</td>
+<td>—</td>
+<td><code>name</code>, <code>phone</code>, <code>inn</code>, <code>email</code>, <code>code</code></td>
+</tr>
+<tr>
+<td><code>ordering</code></td>
+<td>string</td>
+<td><code>id</code>, <code>name</code>, <code>created_at</code>, <code>updated_at</code></td>
+<td>Tartib</td>
+</tr>
+<tr>
+<td><code>kind</code></td>
+<td>string</td>
+<td><code>SUPPLIER</code>, <code>CLIENT</code>, <code>BOTH</code></td>
+<td>Kontragent turi</td>
+</tr>
+<tr>
+<td><code>is_active</code></td>
+<td>string</td>
+<td><code>true</code>, <code>false</code></td>
+<td>Faollik holati</td>
+</tr>
+<tr>
+<td><code>created_from</code></td>
+<td>date</td>
+<td><code>YYYY-MM-DD</code></td>
+<td>Yaratilgan sanadan</td>
+</tr>
+<tr>
+<td><code>created_to</code></td>
+<td>date</td>
+<td><code>YYYY-MM-DD</code></td>
+<td>Yaratilgan sanagacha</td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>int</td>
+<td>—</td>
+<td>Sahifa</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response 200:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;count&quot;: 25,
+  &quot;results&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;kind&quot;: &quot;SUPPLIER&quot;,
+      &quot;code&quot;: &quot;KNT-000001&quot;,
+      &quot;name&quot;: &quot;Toshkent Kimyo MChJ&quot;,
+      &quot;phone&quot;: &quot;+998712345678&quot;,
+      &quot;email&quot;: &quot;info@kimyo.uz&quot;,
+      &quot;inn&quot;: &quot;123456789&quot;,
+      &quot;is_active&quot;: true
+    }
+  ]
+}
+</code></pre>
+
+<p><strong>GET Detail:</strong></p>
+<pre class="codehilite"><code>GET /api/v1/partners/kontragents/{id}/
+</code></pre>
+
+<p><strong>Response 200:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;id&quot;: 1,
+  &quot;kind&quot;: &quot;SUPPLIER&quot;,
+  &quot;code&quot;: &quot;KNT-000001&quot;,
+  &quot;name&quot;: &quot;Toshkent Kimyo MChJ&quot;,
+  &quot;phone&quot;: &quot;+998712345678&quot;,
+  &quot;email&quot;: &quot;info@kimyo.uz&quot;,
+  &quot;inn&quot;: &quot;123456789&quot;,
+  &quot;address&quot;: &quot;Toshkent sh, Yunusobod t.&quot;,
+  &quot;notes&quot;: &quot;Asosiy yetkazib beruvchi&quot;,
+  &quot;is_active&quot;: true,
+  &quot;created_at&quot;: &quot;2026-01-15T10:30:00Z&quot;,
+  &quot;updated_at&quot;: &quot;2026-03-01T08:00:00Z&quot;
+}
+</code></pre>
+
+<p><strong>POST Create:</strong></p>
+<pre class="codehilite"><code>POST /api/v1/partners/kontragents/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{
+  &quot;kind&quot;: &quot;SUPPLIER&quot;,
+  &quot;name&quot;: &quot;Yangi Kompaniya&quot;,
+  &quot;phone&quot;: &quot;+998901234567&quot;,
+  &quot;email&quot;: &quot;info@company.uz&quot;,
+  &quot;inn&quot;: &quot;987654321&quot;,
+  &quot;address&quot;: &quot;Samarqand sh.&quot;,
+  &quot;notes&quot;: &quot;Ixtiyoriy izoh&quot;
+}
+</code></pre>
+
+<blockquote>
+<p><code>code</code> avtomatik beriladi (<code>KNT-XXXXXX</code> formatida)
+<code>kind</code> ixtiyoriy, default: <code>CLIENT</code>
+<code>phone</code> O'zbekiston formati: <code>+998XXXXXXXXX</code>
+<code>inn</code> 9 yoki 14 ta raqam</p>
+</blockquote>
+<p><strong>Response 201:</strong> Detail serializer (yuqoridagi kabi)</p>
+<p><strong>PATCH Update:</strong></p>
+<pre class="codehilite"><code>PATCH /api/v1/partners/kontragents/{id}/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{
+  &quot;is_active&quot;: false,
+  &quot;notes&quot;: &quot;Yangilangan izoh&quot;
+}
+</code></pre>
+
+<p><strong>DELETE:</strong></p>
+<pre class="codehilite"><code>DELETE /api/v1/partners/kontragents/{id}/
+</code></pre>
+
+<p><strong>Response 204</strong> — muvaffaqiyatli
+<strong>Response 409:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;detail&quot;: &quot;O'chirib bo'lmadi. Kontragent boshqa yozuvlarga bog'langan.&quot;,
+  &quot;references&quot;: [
+    { &quot;model&quot;: &quot;purchases.purchase&quot;, &quot;relation&quot;: &quot;supplier&quot;, &quot;count&quot;: 5 }
+  ]
+}
+</code></pre>
+
+<hr />
+<h3 id="32-xodimlar-employees">3.2 Xodimlar (Employees)</h3>
+<p><strong>Base:</strong> <code>/api/v1/partners/employees/</code></p>
+<p><strong>GET List:</strong></p>
+<pre class="codehilite"><code>GET /api/v1/partners/employees/
+</code></pre>
+
+<p><strong>Query parametrlar:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parametr</th>
+<th>Turi</th>
+<th>Qiymatlar</th>
+<th>Tavsif</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>search</code></td>
+<td>string</td>
+<td>—</td>
+<td><code>full_name</code>, <code>phone</code>, <code>position</code></td>
+</tr>
+<tr>
+<td><code>ordering</code></td>
+<td>string</td>
+<td><code>id</code>, <code>full_name</code>, <code>created_at</code>, <code>base_salary</code></td>
+<td>Tartib</td>
+</tr>
+<tr>
+<td><code>is_active</code></td>
+<td>string</td>
+<td><code>true</code>, <code>false</code></td>
+<td>Faollik</td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>int</td>
+<td>—</td>
+<td>Sahifa</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response 200:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;count&quot;: 12,
+  &quot;results&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;full_name&quot;: &quot;Jasur Toshmatov&quot;,
+      &quot;position&quot;: &quot;Operator&quot;,
+      &quot;phone&quot;: &quot;+998901234567&quot;,
+      &quot;base_salary&quot;: 3000000,
+      &quot;currency&quot;: &quot;UZS&quot;,
+      &quot;is_active&quot;: true,
+      &quot;salary_status&quot;: &quot;ADVANCE_TAKEN&quot;,
+      &quot;this_month_advance&quot;: 1000000,
+      &quot;salary_remaining&quot;: 2000000
+    }
+  ]
+}
+</code></pre>
+
+<blockquote>
+<p><strong>salary_status:</strong> <code>UNPAID</code> | <code>ADVANCE_TAKEN</code> | <code>PAID</code> — joriy oy uchun</p>
+</blockquote>
+<p><strong>GET Detail:</strong></p>
+<pre class="codehilite"><code>GET /api/v1/partners/employees/{id}/
+</code></pre>
+
+<p><strong>Response 200:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;id&quot;: 1,
+  &quot;full_name&quot;: &quot;Jasur Toshmatov&quot;,
+  &quot;position&quot;: &quot;Operator&quot;,
+  &quot;phone&quot;: &quot;+998901234567&quot;,
+  &quot;base_salary&quot;: 3000000,
+  &quot;currency&quot;: &quot;UZS&quot;,
+  &quot;is_active&quot;: true,
+  &quot;created_at&quot;: &quot;2026-01-10T09:00:00Z&quot;,
+  &quot;updated_at&quot;: &quot;2026-03-01T10:00:00Z&quot;,
+  &quot;salary_status&quot;: &quot;ADVANCE_TAKEN&quot;,
+  &quot;this_month_advance&quot;: 1000000,
+  &quot;salary_remaining&quot;: 2000000
+}
+</code></pre>
+
+<p><strong>POST Create:</strong></p>
+<pre class="codehilite"><code>POST /api/v1/partners/employees/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{
+  &quot;full_name&quot;: &quot;Yangi Xodim&quot;,
+  &quot;position&quot;: &quot;Omborchi&quot;,
+  &quot;phone&quot;: &quot;+998901112233&quot;,
+  &quot;base_salary&quot;: 2500000,
+  &quot;currency&quot;: &quot;UZS&quot;
+}
+</code></pre>
+
+<p><strong>PATCH Update:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;base_salary&quot;: 3000000,
+  &quot;is_active&quot;: true
+}
+</code></pre>
+
+<p><strong>DELETE:</strong> <code>DELETE /api/v1/partners/employees/{id}/</code> — Response 204</p>
+<hr />
+<h2 id="4-catalog-katalog">4. CATALOG (Katalog)</h2>
+<p><strong>Base:</strong> <code>/api/v1/catalog/</code></p>
+<hr />
+<h3 id="41-xom-ashyolar-raw-materials">4.1 Xom Ashyolar (Raw Materials)</h3>
+<p><strong>Base:</strong> <code>/api/v1/catalog/materials/</code></p>
+<p><strong>GET List:</strong></p>
+<pre class="codehilite"><code>GET /api/v1/catalog/materials/
+</code></pre>
+
+<p><strong>Query parametrlar:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parametr</th>
+<th>Turi</th>
+<th>Tavsif</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>search</code></td>
+<td>string</td>
+<td><code>name</code> bo'yicha qidiruv</td>
+</tr>
+<tr>
+<td><code>ordering</code></td>
+<td>string</td>
+<td><code>id</code>, <code>name</code>, <code>created_at</code></td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>int</td>
+<td>Sahifa</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response 200:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;count&quot;: 30,
+  &quot;results&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;name&quot;: &quot;Loy&quot;,
+      &quot;material_type_name&quot;: &quot;Qurilish&quot;,
+      &quot;uom_name&quot;: &quot;KG&quot;,
+      &quot;purchase_price&quot;: 15000,
+      &quot;currency&quot;: &quot;UZS&quot;,
+      &quot;created_at&quot;: &quot;2026-01-01T00:00:00Z&quot;
+    }
+  ]
+}
+</code></pre>
+
+<p><strong>GET Detail:</strong></p>
+<pre class="codehilite"><code>GET /api/v1/catalog/materials/{id}/
+</code></pre>
+
+<p><strong>Response 200:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;id&quot;: 1,
+  &quot;name&quot;: &quot;Loy&quot;,
+  &quot;material_type_name&quot;: &quot;Qurilish&quot;,
+  &quot;description&quot;: &quot;Qurilish uchun loy&quot;,
+  &quot;uom_name&quot;: &quot;KG&quot;,
+  &quot;purchase_price&quot;: 15000,
+  &quot;currency&quot;: &quot;UZS&quot;,
+  &quot;created_at&quot;: &quot;2026-01-01T00:00:00Z&quot;,
+  &quot;updated_at&quot;: &quot;2026-03-01T00:00:00Z&quot;
+}
+</code></pre>
+
+<p><strong>POST Create:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;name&quot;: &quot;Sulfat&quot;,
+  &quot;material_type&quot;: 2,
+  &quot;description&quot;: &quot;Tozalovchi&quot;,
+  &quot;uom&quot;: 1,
+  &quot;purchase_price&quot;: 15000,
+  &quot;currency&quot;: &quot;UZS&quot;
+}
+</code></pre>
+
+<blockquote>
+<p><code>material_type</code> va <code>uom</code> — ID (integer)
+<code>purchase_price</code> integer (tiyin emas, so'm)</p>
+</blockquote>
+<p><strong>PATCH Update:</strong> Xuddi create bilan bir xil fieldlar
+<strong>DELETE:</strong> Response 204, bog'liq bo'lsa 409</p>
+<hr />
+<h3 id="42-tayyor-mahsulotlar-products">4.2 Tayyor Mahsulotlar (Products)</h3>
+<p><strong>Base:</strong> <code>/api/v1/catalog/products/</code></p>
+<p><strong>GET List:</strong></p>
+<pre class="codehilite"><code>GET /api/v1/catalog/products/
+</code></pre>
+
+<p><strong>Query params:</strong></p>
+<ul>
+<li><code>search</code> — name bo'yicha qidirish (DRF SearchFilter)</li>
+<li><code>category</code> — kategoriya ID bo'yicha filter</li>
+<li><code>ordering</code> — <code>id</code>, <code>name</code>, <code>created_at</code> (masalan, <code>ordering=-created_at</code>)</li>
+<li><code>page</code> — pagination sahifasi</li>
+</ul>
+
+<p><strong>Response 200:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;count&quot;: 15,
+  &quot;results&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;name&quot;: &quot;G'isht A&quot;,
+      &quot;category_name&quot;: &quot;Qurilish mahsuloti&quot;,
+      &quot;uom_name&quot;: &quot;PCS&quot;,
+      &quot;min_price&quot;: 800,
+      &quot;selling_price&quot;: 1200,
+      &quot;currency&quot;: &quot;UZS&quot;,
+      &quot;created_at&quot;: &quot;2026-01-05T00:00:00Z&quot;
+    }
+  ]
+}
+</code></pre>
+
+<p><strong>GET Detail:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;id&quot;: 1,
+  &quot;name&quot;: &quot;G'isht A&quot;,
+  &quot;category&quot;: 1,
+  &quot;category_name&quot;: &quot;Qurilish mahsuloti&quot;,
+  &quot;uom&quot;: 2,
+  &quot;uom_name&quot;: &quot;PCS&quot;,
+  &quot;min_price&quot;: 800,
+  &quot;selling_price&quot;: 1200,
+  &quot;currency&quot;: &quot;UZS&quot;,
+  &quot;created_at&quot;: &quot;...&quot;,
+  &quot;updated_at&quot;: &quot;...&quot;
+}
+</code></pre>
+
+<p><strong>POST Create:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;name&quot;: &quot;G'isht B&quot;,
+  &quot;category&quot;: 1,
+  &quot;uom&quot;: 2,
+  &quot;min_price&quot;: 700,
+  &quot;selling_price&quot;: 1100,
+  &quot;currency&quot;: &quot;UZS&quot;
+}
+</code></pre>
+
+<blockquote>
+<p>Bir xil <code>name + category + uom</code> kombinatsiyasi bo'lmasligi kerak</p>
+</blockquote>
+<p><strong>GET Export (Excel):</strong></p>
+<pre class="codehilite"><code>GET /api/v1/catalog/products/{id}/export/
+</code></pre>
+
+<p>Response: <code>.xlsx</code> fayl (barcha buyurtmalar ushbu mahsulot bo'yicha)</p>
+<hr />
+<h3 id="43-retseptlar-recipes">4.3 Retseptlar (Recipes)</h3>
+<p><strong>Base:</strong> <code>/api/v1/catalog/recipes/</code></p>
+<p>Mahsulot ishlab chiqarish retsepti — qaysi xom ashyo qancha sarflanishini ko'rsatadi.</p>
+<hr />
+<h2 id="5-purchases-xaridlar">5. PURCHASES (Xaridlar)</h2>
+<p><strong>Base:</strong> <code>/api/v1/purchases/</code></p>
+<h3 id="holat-diagrammasi">Holat diagrammasi:</h3>
+<pre class="codehilite"><code>DRAFT → CONFIRMED → (CANCELLED)
+           ↓
+      Omborga kirim
+</code></pre>
+
+<hr />
+<h3 id="51-meta-choices">5.1 Meta (choices)</h3>
+<pre class="codehilite"><code>GET /api/v1/purchases/meta/
+</code></pre>
+
+<p><strong>Response 200:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;payment_method_choices&quot;: [
+    {&quot;value&quot;: &quot;CASH&quot;, &quot;label&quot;: &quot;CASH&quot;},
+    {&quot;value&quot;: &quot;BANK_TRANSFER&quot;, &quot;label&quot;: &quot;BANK_TRANSFER&quot;},
+    {&quot;value&quot;: &quot;CARD&quot;, &quot;label&quot;: &quot;CARD&quot;}
+  ],
+  &quot;purchase_status_choices&quot;: [
+    {&quot;value&quot;: &quot;DRAFT&quot;, &quot;label&quot;: &quot;DRAFT&quot;},
+    {&quot;value&quot;: &quot;CONFIRMED&quot;, &quot;label&quot;: &quot;CONFIRMED&quot;},
+    {&quot;value&quot;: &quot;CANCELLED&quot;, &quot;label&quot;: &quot;CANCELLED&quot;}
+  ],
+  &quot;currency_choices&quot;: [
+    {&quot;value&quot;: &quot;UZS&quot;, &quot;label&quot;: &quot;UZS&quot;}
+  ]
+}
+</code></pre>
+
+<hr />
+<h3 id="52-xaridlar-royxati">5.2 Xaridlar ro'yxati</h3>
+<pre class="codehilite"><code>GET /api/v1/purchases/
+</code></pre>
+
+<p><strong>Query parametrlar:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parametr</th>
+<th>Turi</th>
+<th>Qiymatlar</th>
+<th>Tavsif</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>search</code></td>
+<td>string</td>
+<td>—</td>
+<td>purchase_no, supplier nomi/telefon/inn</td>
+</tr>
+<tr>
+<td><code>ordering</code></td>
+<td>string</td>
+<td><code>id</code>, <code>purchase_no</code>, <code>received_date</code>, <code>total</code>, <code>status</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>string</td>
+<td><code>DRAFT</code>, <code>CONFIRMED</code>, <code>CANCELLED</code></td>
+<td>Holat filter</td>
+</tr>
+<tr>
+<td><code>payment_status</code></td>
+<td>string</td>
+<td><code>UNPAID</code>, <code>PARTIAL</code>, <code>PAID</code></td>
+<td>To'lov holati</td>
+</tr>
+<tr>
+<td><code>supplier</code></td>
+<td>int</td>
+<td>—</td>
+<td>Supplier ID</td>
+</tr>
+<tr>
+<td><code>date_from</code></td>
+<td>date</td>
+<td><code>YYYY-MM-DD</code></td>
+<td>received_date dan</td>
+</tr>
+<tr>
+<td><code>date_to</code></td>
+<td>date</td>
+<td><code>YYYY-MM-DD</code></td>
+<td>received_date gacha</td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>int</td>
+<td>—</td>
+<td>Sahifa</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response 200:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;count&quot;: 50,
+  &quot;results&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;purchase_no&quot;: &quot;PUR-000001&quot;,
+      &quot;status&quot;: &quot;CONFIRMED&quot;,
+      &quot;supplier_name&quot;: &quot;Toshkent Kimyo&quot;,
+      &quot;received_date&quot;: &quot;2026-03-01&quot;,
+      &quot;total&quot;: 5000000,
+      &quot;paid_amount&quot;: 3000000,
+      &quot;remaining_amount&quot;: 2000000,
+      &quot;payment_status&quot;: &quot;PARTIAL&quot;,
+      &quot;location_name&quot;: &quot;Asosiy ombor&quot;
+    }
+  ]
+}
+</code></pre>
+
+<hr />
+<h3 id="53-xarid-detail">5.3 Xarid detail</h3>
+<pre class="codehilite"><code>GET /api/v1/purchases/{id}/
+</code></pre>
+
+<p><strong>Response 200:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;id&quot;: 1,
+  &quot;purchase_no&quot;: &quot;PUR-000001&quot;,
+  &quot;status&quot;: &quot;CONFIRMED&quot;,
+  &quot;supplier&quot;: 1,
+  &quot;supplier_name&quot;: &quot;Toshkent Kimyo&quot;,
+  &quot;received_date&quot;: &quot;2026-03-01&quot;,
+  &quot;produced_date&quot;: &quot;2026-02-28&quot;,
+  &quot;delivery_company&quot;: &quot;Express Yetkazish&quot;,
+  &quot;location_name&quot;: &quot;Asosiy ombor&quot;,
+  &quot;notes&quot;: &quot;Mart oyi xom ashyo&quot;,
+  &quot;currency&quot;: &quot;UZS&quot;,
+  &quot;total&quot;: 5000000,
+  &quot;paid_amount&quot;: 3000000,
+  &quot;remaining_amount&quot;: 2000000,
+  &quot;payment_status&quot;: &quot;PARTIAL&quot;,
+  &quot;confirmed_at&quot;: &quot;2026-03-02T10:00:00Z&quot;,
+  &quot;cancelled_at&quot;: null,
+  &quot;items&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;raw_material&quot;: 2,
+      &quot;raw_material_name&quot;: &quot;Loy&quot;,
+      &quot;qty&quot;: &quot;500.000000&quot;,
+      &quot;unit_price&quot;: 5000,
+      &quot;line_total&quot;: 2500000
+    }
+  ],
+  &quot;payments&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;method&quot;: &quot;CASH&quot;,
+      &quot;amount&quot;: 3000000,
+      &quot;paid_at&quot;: &quot;2026-03-05T00:00:00Z&quot;,
+      &quot;note&quot;: &quot;Avans&quot;
+    }
+  ]
+}
+</code></pre>
+
+<hr />
+<h3 id="54-xarid-yaratish">5.4 Xarid yaratish</h3>
+<pre class="codehilite"><code>POST /api/v1/purchases/
+</code></pre>
+
+<p><strong>Request body:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;supplier&quot;: 1,
+  &quot;received_date&quot;: &quot;2026-03-07&quot;,
+  &quot;location&quot;: 1,
+  &quot;notes&quot;: &quot;Mart oyi loy xaridi&quot;,
+  &quot;items&quot;: [
+    { &quot;raw_material&quot;: 1, &quot;qty&quot;: &quot;500.000000&quot;, &quot;unit_price&quot;: 2000 },
+    { &quot;raw_material&quot;: 2, &quot;qty&quot;: &quot;200.000000&quot;, &quot;unit_price&quot;: 5000 }
+  ]
+}
+</code></pre>
+
+<blockquote>
+<p><code>received_date</code> ixtiyoriy, default: bugungi sana
+<code>items</code> ixtiyoriy (keyinroq qo'shish mumkin)
+<code>supplier</code> faqat <code>SUPPLIER</code> yoki <code>BOTH</code> kontragent bo'lishi kerak</p>
+</blockquote>
+<p><strong>Response 201:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;id&quot;: 10,
+  &quot;purchase_no&quot;: &quot;PUR-000010&quot;,
+  &quot;status&quot;: &quot;DRAFT&quot;,
+  &quot;currency&quot;: &quot;UZS&quot;,
+  &quot;supplier_name&quot;: &quot;Toshkent Kimyo&quot;,
+  &quot;received_date&quot;: &quot;2026-03-07&quot;,
+  &quot;location_name&quot;: &quot;Asosiy ombor&quot;,
+  &quot;notes&quot;: &quot;Mart oyi loy xaridi&quot;,
+  &quot;total&quot;: 2000000,
+  &quot;remaining_amount&quot;: 2000000,
+  &quot;items&quot;: [ ... ]
+}
+</code></pre>
+
+<hr />
+<h3 id="55-xaridni-yangilash-draft-holat">5.5 Xaridni yangilash (DRAFT holat)</h3>
+<pre class="codehilite"><code>PATCH /api/v1/purchases/{id}/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{
+  &quot;notes&quot;: &quot;Yangilangan izoh&quot;,
+  &quot;location&quot;: 2
+}
+</code></pre>
+
+<blockquote>
+<p>Faqat <code>DRAFT</code> holatda tahrirlash mumkin!</p>
+</blockquote>
+<hr />
+<h3 id="56-item-qoshish">5.6 Item qo'shish</h3>
+<pre class="codehilite"><code>POST /api/v1/purchases/{id}/items/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{
+  &quot;raw_material&quot;: 3,
+  &quot;qty&quot;: &quot;100.000000&quot;,
+  &quot;unit_price&quot;: 8000
+}
+</code></pre>
+
+<p><strong>Response 201:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;id&quot;: 10,
+  &quot;purchase_no&quot;: &quot;PUR-000010&quot;,
+  &quot;status&quot;: &quot;DRAFT&quot;,
+  &quot;total&quot;: 2800000,
+  &quot;remaining_amount&quot;: 2800000,
+  &quot;items&quot;: [ ... ]
+}
+</code></pre>
+
+<hr />
+<h3 id="57-item-yangilash">5.7 Item yangilash</h3>
+<pre class="codehilite"><code>PATCH /api/v1/purchases/{id}/items/{item_id}/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{ &quot;qty&quot;: &quot;150.000000&quot;, &quot;unit_price&quot;: 8500 }
+</code></pre>
+
+<hr />
+<h3 id="58-item-ochirish">5.8 Item o'chirish</h3>
+<pre class="codehilite"><code>DELETE /api/v1/purchases/{id}/items/{item_id}/
+</code></pre>
+
+<p>Response 204</p>
+<hr />
+<h3 id="59-tasdiqlash-confirm">5.9 Tasdiqlash (Confirm)</h3>
+<pre class="codehilite"><code>POST /api/v1/purchases/{id}/confirm/
+</code></pre>
+
+<p><strong>Request body:</strong> <code>{}</code> (bo'sh)</p>
+<blockquote>
+<p>Confirm qilganda: <code>DRAFT → CONFIRMED</code>, har item uchun omborga kirim (IN) yoziladi.
+Confirm dan keyin tahrirlash mumkin emas.</p>
+</blockquote>
+<p><strong>Response 200:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;id&quot;: 10,
+  &quot;purchase_no&quot;: &quot;PUR-000010&quot;,
+  &quot;status&quot;: &quot;CONFIRMED&quot;,
+  &quot;total&quot;: 2800000,
+  &quot;paid_amount&quot;: 0,
+  &quot;remaining_amount&quot;: 2800000,
+  &quot;payment_status&quot;: &quot;UNPAID&quot;,
+  &quot;confirmed_at&quot;: &quot;2026-03-07T12:00:00Z&quot;
+}
+</code></pre>
+
+<hr />
+<h3 id="510-bekor-qilish-cancel">5.10 Bekor qilish (Cancel)</h3>
+<pre class="codehilite"><code>POST /api/v1/purchases/{id}/cancel/
+</code></pre>
+
+<p><strong>Request body:</strong> <code>{}</code> (bo'sh)</p>
+<blockquote>
+<p>DRAFT bo'lsa: shunchaki CANCELLED
+CONFIRMED bo'lsa: ombor harakatlari teskari yoziladi, to'lovlar bekor qilinadi</p>
+</blockquote>
+<hr />
+<h3 id="511-excel-eksport">5.11 Excel eksport</h3>
+<pre class="codehilite"><code>GET /api/v1/purchases/{id}/export/
+</code></pre>
+
+<p>Response: <code>.xlsx</code> fayl (xarid hujjati ko'rinishida)</p>
+<hr />
+<h2 id="6-production-ishlab-chiqarish">6. PRODUCTION (Ishlab Chiqarish)</h2>
+<p><strong>Base:</strong> <code>/api/v1/production/</code></p>
+<h3 id="holat-diagrammasi_1">Holat diagrammasi:</h3>
+<pre class="codehilite"><code>DRAFT → CONFIRMED → IN_PROGRESS → DONE
+  ↓         ↓            ↓
+CANCELLED  CANCELLED   CANCELLED
+</code></pre>
+
+<hr />
+<h3 id="61-royxat">6.1 Ro'yxat</h3>
+<pre class="codehilite"><code>GET /api/v1/production/
+</code></pre>
+
+<p><strong>Query parametrlar:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parametr</th>
+<th>Turi</th>
+<th>Qiymatlar</th>
+<th>Tavsif</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>search</code></td>
+<td>string</td>
+<td>—</td>
+<td>batch_no, product nomi, notes</td>
+</tr>
+<tr>
+<td><code>ordering</code></td>
+<td>string</td>
+<td><code>id</code>, <code>batch_no</code>, <code>production_date</code>, <code>created_at</code></td>
+<td>Tartib</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>string</td>
+<td><code>DRAFT</code>, <code>CONFIRMED</code>, <code>IN_PROGRESS</code>, <code>DONE</code>, <code>CANCELLED</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>product</code></td>
+<td>int</td>
+<td>—</td>
+<td>Product ID</td>
+</tr>
+<tr>
+<td><code>location</code></td>
+<td>int</td>
+<td>—</td>
+<td>Lokatsiya ID</td>
+</tr>
+<tr>
+<td><code>date_from</code></td>
+<td>date</td>
+<td><code>YYYY-MM-DD</code></td>
+<td>production_date dan</td>
+</tr>
+<tr>
+<td><code>date_to</code></td>
+<td>date</td>
+<td><code>YYYY-MM-DD</code></td>
+<td>production_date gacha</td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>int</td>
+<td>—</td>
+<td>Sahifa</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response 200:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;count&quot;: 20,
+  &quot;results&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;batch_no&quot;: &quot;BAT-000001&quot;,
+      &quot;status&quot;: &quot;DONE&quot;,
+      &quot;product&quot;: 1,
+      &quot;product_name&quot;: &quot;G'isht A&quot;,
+      &quot;location_name&quot;: &quot;Ishlab chiqarish&quot;,
+      &quot;output_location_name&quot;: &quot;Tayyor mahsulot ombori&quot;,
+      &quot;qty_produced&quot;: &quot;1000.000000&quot;,
+      &quot;qty_actual&quot;: &quot;980.000000&quot;,
+      &quot;qty_waste&quot;: &quot;20.000000&quot;,
+      &quot;production_date&quot;: &quot;2026-03-10&quot;,
+      &quot;total_cost&quot;: 850000,
+      &quot;unit_cost&quot;: 867,
+      &quot;consumptions&quot;: [ ... ]
+    }
+  ]
+}
+</code></pre>
+
+<hr />
+<h3 id="62-detail">6.2 Detail</h3>
+<pre class="codehilite"><code>GET /api/v1/production/{id}/
+</code></pre>
+
+<p>Ro'yxatdagi kabi, qo'shimcha: <code>recipe_name</code>, <code>waste_location_name</code>, <code>confirmed_at</code>, <code>started_at</code>, <code>done_at</code>, <code>cancelled_at</code>, <code>cancel_reason</code></p>
+<hr />
+<h3 id="63-yaratish-draft">6.3 Yaratish (DRAFT)</h3>
+<pre class="codehilite"><code>POST /api/v1/production/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{
+  &quot;product&quot;: 10,
+  &quot;recipe&quot;: 3,
+  &quot;qty_produced&quot;: &quot;100.000000&quot;,
+  &quot;production_date&quot;: &quot;2026-03-15&quot;,
+  &quot;location&quot;: 2,
+  &quot;output_location&quot;: 3,
+  &quot;notes&quot;: &quot;1-navbat&quot;,
+  &quot;extra_cost_total&quot;: 50000,
+  &quot;currency&quot;: &quot;UZS&quot;
+}
+</code></pre>
+
+<blockquote>
+<p><code>recipe</code> majburiy — retseptdan <code>consumptions</code> avtomatik hisoblanadi
+<code>production_date</code> ixtiyoriy, default: bugun
+<code>output_location</code> ixtiyoriy, default: <code>location</code> bilan bir xil</p>
+</blockquote>
+<hr />
+<h3 id="64-preview-oldindan-korish">6.4 Preview (oldindan ko'rish)</h3>
+<pre class="codehilite"><code>POST /api/v1/production/{id}/preview/
+</code></pre>
+
+<p><strong>Request body:</strong> <code>{}</code> (bo'sh)</p>
+<blockquote>
+<p>Omborda yetarli xom ashyo bormi, taxminiy narx qancha?</p>
+</blockquote>
+<hr />
+<h3 id="65-confirm">6.5 Confirm</h3>
+<pre class="codehilite"><code>POST /api/v1/production/{id}/confirm/
+</code></pre>
+
+<p><code>DRAFT → CONFIRMED</code> — materiallar rezerv qilinadi</p>
+<hr />
+<h3 id="66-ishni-boshlash-start">6.6 Ishni boshlash (Start)</h3>
+<pre class="codehilite"><code>POST /api/v1/production/{id}/start/
+</code></pre>
+
+<p><code>CONFIRMED → IN_PROGRESS</code></p>
+<hr />
+<h3 id="67-tugatish-done">6.7 Tugatish (Done)</h3>
+<pre class="codehilite"><code>POST /api/v1/production/{id}/done/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{
+  &quot;qty_actual&quot;: &quot;980.000000&quot;,
+  &quot;qty_waste&quot;: &quot;20.000000&quot;
+}
+</code></pre>
+
+<blockquote>
+<p><code>IN_PROGRESS → DONE</code>
+Materiallar ombordan OUT, tayyor mahsulot IN yoziladi
+Final <code>unit_cost</code> hisoblanadi</p>
+</blockquote>
+<hr />
+<h3 id="68-bekor-qilish-cancel">6.8 Bekor qilish (Cancel)</h3>
+<pre class="codehilite"><code>POST /api/v1/production/{id}/cancel/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{ &quot;cancel_reason&quot;: &quot;Sababini yozing&quot; }
+</code></pre>
+
+<hr />
+<h2 id="7-orders-buyurtmalar-sotuv">7. ORDERS (Buyurtmalar / Sotuv)</h2>
+<p><strong>Base:</strong> <code>/api/v1/orders/</code></p>
+<h3 id="holat-diagrammasi-kanban">Holat diagrammasi (Kanban):</h3>
+<pre class="codehilite"><code>NEW → IN_PROGRESS → READY → ON_DELIVERY → DELIVERED
+  ↓         ↓          ↓          ↓
+CANCELLED  ...        ...     CANCELLED
+</code></pre>
+
+<hr />
+<h3 id="71-royxat">7.1 Ro'yxat</h3>
+<pre class="codehilite"><code>GET /api/v1/orders/
+</code></pre>
+
+<p><strong>Query parametrlar:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parametr</th>
+<th>Turi</th>
+<th>Qiymatlar</th>
+<th>Tavsif</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>search</code></td>
+<td>string</td>
+<td>—</td>
+<td>order_no, client nomi/kodi/telefon/inn</td>
+</tr>
+<tr>
+<td><code>ordering</code></td>
+<td>string</td>
+<td><code>id</code>, <code>order_no</code>, <code>order_date</code>, <code>total</code>, <code>created_at</code></td>
+<td>Tartib</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>string</td>
+<td><code>NEW</code>, <code>IN_PROGRESS</code>, <code>READY</code>, <code>ON_DELIVERY</code>, <code>DELIVERED</code>, <code>CANCELLED</code></td>
+<td>Holat</td>
+</tr>
+<tr>
+<td><code>payment_status</code></td>
+<td>string</td>
+<td><code>UNPAID</code>, <code>PARTIAL</code>, <code>PAID</code></td>
+<td>To'lov holati</td>
+</tr>
+<tr>
+<td><code>client</code></td>
+<td>int</td>
+<td>—</td>
+<td>Client ID</td>
+</tr>
+<tr>
+<td><code>date_from</code></td>
+<td>date</td>
+<td><code>YYYY-MM-DD</code></td>
+<td>order_date dan</td>
+</tr>
+<tr>
+<td><code>date_to</code></td>
+<td>date</td>
+<td><code>YYYY-MM-DD</code></td>
+<td>order_date gacha</td>
+</tr>
+<tr>
+<td><code>shipment_state</code></td>
+<td>string</td>
+<td><code>none</code>, <code>partial</code>, <code>full</code></td>
+<td>Jo'natish holati</td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>int</td>
+<td>—</td>
+<td>Sahifa</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response 200:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;count&quot;: 100,
+  &quot;results&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;order_no&quot;: &quot;ORD-000001&quot;,
+      &quot;status&quot;: &quot;READY&quot;,
+      &quot;client&quot;: { &quot;id&quot;: 1, &quot;code&quot;: &quot;KNT-000001&quot;, &quot;name&quot;: &quot;Alisher&quot;, &quot;phone&quot;: &quot;+998901234567&quot;, &quot;inn&quot;: null },
+      &quot;order_date&quot;: &quot;2026-03-10&quot;,
+      &quot;subtotal&quot;: 2400000,
+      &quot;nds_total&quot;: 288000,
+      &quot;total&quot;: 2688000,
+      &quot;discount_total&quot;: 0,
+      &quot;paid_amount&quot;: 0,
+      &quot;remaining_amount&quot;: 2688000,
+      &quot;payment_status&quot;: &quot;UNPAID&quot;,
+      &quot;courier_name&quot;: &quot;Jasur&quot;,
+      &quot;total_qty&quot;: &quot;4.000000&quot;,
+      &quot;shipped_qty&quot;: &quot;0.000000&quot;,
+      &quot;reserved_qty&quot;: &quot;4.000000&quot;
+    }
+  ]
+}
+</code></pre>
+
+<hr />
+<h3 id="72-detail">7.2 Detail</h3>
+<pre class="codehilite"><code>GET /api/v1/orders/{id}/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{
+  &quot;id&quot;: 1,
+  &quot;order_no&quot;: &quot;ORD-000001&quot;,
+  &quot;status&quot;: &quot;READY&quot;,
+  &quot;client&quot;: { ... },
+  &quot;order_date&quot;: &quot;2026-03-10&quot;,
+  &quot;delivery_date&quot;: &quot;2026-03-15&quot;,
+  &quot;courier_name&quot;: &quot;Jasur&quot;,
+  &quot;notes&quot;: &quot;Tezkor yetkazish&quot;,
+  &quot;subtotal&quot;: 2400000,
+  &quot;nds_total&quot;: 288000,
+  &quot;total&quot;: 2688000,
+  &quot;discount_total&quot;: 0,
+  &quot;paid_amount&quot;: 0,
+  &quot;remaining_amount&quot;: 2688000,
+  &quot;payment_status&quot;: &quot;UNPAID&quot;,
+  &quot;currency&quot;: &quot;UZS&quot;,
+  &quot;confirmed_at&quot;: &quot;2026-03-10T11:00:00Z&quot;,
+  &quot;cancelled_at&quot;: null,
+  &quot;items&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;item_type&quot;: &quot;FINISHED_PRODUCT&quot;,
+      &quot;product&quot;: 1,
+      &quot;raw_material&quot;: null,
+      &quot;product_name&quot;: &quot;G'isht A&quot;,
+      &quot;raw_material_name&quot;: null,
+      &quot;min_price&quot;: 800,
+      &quot;default_selling_price&quot;: 1200,
+      &quot;qty&quot;: &quot;4.000000&quot;,
+      &quot;unit_price&quot;: 1200,
+      &quot;nds_rate&quot;: &quot;12.00&quot;,
+      &quot;line_subtotal&quot;: 4800,
+      &quot;nds_amount&quot;: 576,
+      &quot;line_total&quot;: 5376
+    }
+  ],
+  &quot;reservations&quot;: [ ... ],
+  &quot;status_history&quot;: [ ... ],
+  &quot;payments&quot;: [ ... ]
+}
+</code></pre>
+
+<hr />
+<h3 id="73-yaratish">7.3 Yaratish</h3>
+<pre class="codehilite"><code>POST /api/v1/orders/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{
+  &quot;client&quot;: 1,
+  &quot;order_date&quot;: &quot;2026-03-10&quot;,
+  &quot;delivery_date&quot;: &quot;2026-03-15&quot;,
+  &quot;courier_name&quot;: &quot;Jasur&quot;,
+  &quot;notes&quot;: &quot;Tezkor yetkazish&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;product&quot;: 1,
+      &quot;qty&quot;: &quot;100.000000&quot;,
+      &quot;unit_price&quot;: 1200,
+      &quot;nds_rate&quot;: &quot;12.00&quot;
+    }
+  ]
+}
+</code></pre>
+
+<blockquote>
+<p><code>client</code> faqat <code>CLIENT</code> yoki <code>BOTH</code> kontragent
+<code>nds_rate</code> 0 dan 100 gacha, default 0
+<code>unit_price</code> berilmasa product.default_selling_price ishlatiladi</p>
+</blockquote>
+<hr />
+<h3 id="74-yangilash">7.4 Yangilash</h3>
+<pre class="codehilite"><code>PATCH /api/v1/orders/{id}/
+</code></pre>
+
+<p>Faqat <code>NEW</code> holat. Header fieldlar: <code>client</code>, <code>order_date</code>, <code>delivery_date</code>, <code>courier_name</code>, <code>notes</code>, <code>discount_total</code></p>
+<hr />
+<h3 id="75-item-qoshish">7.5 Item qo'shish</h3>
+<pre class="codehilite"><code>POST /api/v1/orders/{id}/items/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{
+  &quot;product&quot;: 2,
+  &quot;qty&quot;: &quot;50.000000&quot;,
+  &quot;unit_price&quot;: 1500,
+  &quot;nds_rate&quot;: &quot;0.00&quot;
+}
+</code></pre>
+
+<hr />
+<h3 id="76-item-yangilash">7.6 Item yangilash</h3>
+<pre class="codehilite"><code>PATCH /api/v1/orders/{id}/items/{item_id}/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{ &quot;qty&quot;: &quot;60.000000&quot;, &quot;unit_price&quot;: 1400 }
+</code></pre>
+
+<hr />
+<h3 id="77-item-ochirish">7.7 Item o'chirish</h3>
+<pre class="codehilite"><code>DELETE /api/v1/orders/{id}/items/{item_id}/
+</code></pre>
+
+<hr />
+<h3 id="78-tasdiqlash-confirm">7.8 Tasdiqlash (Confirm)</h3>
+<pre class="codehilite"><code>POST /api/v1/orders/{id}/confirm/
+</code></pre>
+
+<p><code>NEW → IN_PROGRESS</code></p>
+<hr />
+<h3 id="79-rezerv-qilish-reserve">7.9 Rezerv qilish (Reserve)</h3>
+<pre class="codehilite"><code>POST /api/v1/orders/{id}/reserve/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{
+  &quot;location&quot;: 1,
+  &quot;item_id&quot;: 5,
+  &quot;qty&quot;: &quot;100.000000&quot;,
+  &quot;note&quot;: &quot;Ixtiyoriy&quot;
+}
+</code></pre>
+
+<blockquote>
+<p>Ombordan mahsulotni band qilish
+Status: <code>IN_PROGRESS → READY</code> (agar hamma items to'liq rezerv bo'lsa)</p>
+</blockquote>
+<hr />
+<h3 id="710-rezervni-bekor-qilish">7.10 Rezervni bekor qilish</h3>
+<pre class="codehilite"><code>POST /api/v1/orders/{id}/unreserve/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{ &quot;reservation_id&quot;: 3 }
+</code></pre>
+
+<hr />
+<h3 id="711-jonatish-ship">7.11 Jo'natish (Ship)</h3>
+<pre class="codehilite"><code>POST /api/v1/orders/{id}/ship/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{
+  &quot;location&quot;: 1,
+  &quot;item_id&quot;: 5,
+  &quot;qty&quot;: &quot;100.000000&quot;,
+  &quot;note&quot;: &quot;1-yuk mashinasi&quot;
+}
+</code></pre>
+
+<blockquote>
+<p><code>READY → ON_DELIVERY</code> (agar birinchi jo'natma bo'lsa)
+Ombordan OUT yoziladi</p>
+</blockquote>
+<hr />
+<h3 id="712-yetkazildi-deliver">7.12 Yetkazildi (Deliver)</h3>
+<pre class="codehilite"><code>POST /api/v1/orders/{id}/deliver/
+</code></pre>
+
+<p><code>ON_DELIVERY → DELIVERED</code> — barcha items yetkazildi</p>
+<hr />
+<h3 id="713-qaytarish-return">7.13 Qaytarish (Return)</h3>
+<pre class="codehilite"><code>POST /api/v1/orders/{id}/return-item/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{
+  &quot;location&quot;: 1,
+  &quot;item_id&quot;: 5,
+  &quot;qty&quot;: &quot;10.000000&quot;,
+  &quot;note&quot;: &quot;Nuqsonli&quot;
+}
+</code></pre>
+
+<blockquote>
+<p>Qaytarilgan mahsulot omborga RETURN yoziladi</p>
+</blockquote>
+<hr />
+<h3 id="714-bekor-qilish">7.14 Bekor qilish</h3>
+<pre class="codehilite"><code>POST /api/v1/orders/{id}/cancel/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{ &quot;note&quot;: &quot;Mijoz rad etdi&quot; }
+</code></pre>
+
+<h3 id="715-chiqarilgan-mahsulotlar-royxati">7.15 Chiqarilgan mahsulotlar ro'yxati (Shipments List)</h3>
+<p>Mijozlarga ombordab chiqarib yuborilgan mahsulotlar hisoboti — JSON formatda ko'rish uchun.</p>
+<pre class="codehilite"><code>GET /api/v1/orders/shipments/</code></pre>
+
+<p><strong>Filter parametrlari:</strong></p>
+<table>
+<thead><tr><th>Param</th><th>Tip</th><th>Qiymatlar</th><th>Izoh</th></tr></thead>
+<tbody>
+<tr><td><code>date</code></td><td>date</td><td><code>YYYY-MM-DD</code></td><td>Aniq bir kun. Berilsa <code>date_from</code>/<code>date_to</code> e'tiborga olinmaydi</td></tr>
+<tr><td><code>date_from</code></td><td>date</td><td><code>YYYY-MM-DD</code></td><td>Boshlanish sanasi</td></tr>
+<tr><td><code>date_to</code></td><td>date</td><td><code>YYYY-MM-DD</code></td><td>Tugash sanasi</td></tr>
+<tr><td><code>client</code></td><td>integer</td><td>Kontragent ID</td><td>Mijoz bo'yicha filter</td></tr>
+<tr><td><code>status</code></td><td>string</td><td><code>NEW</code> <code>IN_PROGRESS</code> <code>READY</code> <code>ON_DELIVERY</code> <code>DELIVERED</code> <code>CANCELLED</code></td><td>Buyurtma holati</td></tr>
+<tr><td><code>payment_status</code></td><td>string</td><td><code>UNPAID</code> <code>PARTIAL</code> <code>PAID</code></td><td>To'lov holati</td></tr>
+<tr><td><code>payment_method</code></td><td>string</td><td><code>CASH</code> <code>BANK_TRANSFER</code> <code>CARD</code></td><td>To'lov usuli</td></tr>
+</tbody>
+</table>
+<blockquote><p>Barcha filterlar ixtiyoriy va kombinatsiyalab ishlatiladi.</p></blockquote>
+
+<p><strong>Misol so'rovlar:</strong></p>
+<pre class="codehilite"><code>GET /api/v1/orders/shipments/?date=2026-03-31
+GET /api/v1/orders/shipments/?date_from=2026-03-01&amp;date_to=2026-03-31
+GET /api/v1/orders/shipments/?status=DELIVERED&amp;payment_status=PAID
+GET /api/v1/orders/shipments/?payment_method=CASH&amp;date_from=2026-03-01&amp;date_to=2026-03-31
+GET /api/v1/orders/shipments/?client=5</code></pre>
+
+<p><strong>Response <code>200 OK</code>:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  "count": 2,
+  "totals": {
+    "qty": 5.0,
+    "total_sell": 250000,
+    "profit": 50000
+  },
+  "results": [
+    {
+      "client": "Abdullayev Sardor",
+      "product": "Stul model A",
+      "qty": 3.0,
+      "unit_cost": 40000,
+      "unit_price": 50000,
+      "total_sell": 150000,
+      "profit": 30000,
+      "order_status": "DELIVERED",
+      "payment_status": "PAID"
+    },
+    {
+      "client": "Karimov Jasur",
+      "product": "Stol model B",
+      "qty": 2.0,
+      "unit_cost": 45000,
+      "unit_price": 50000,
+      "total_sell": 100000,
+      "profit": 10000,
+      "order_status": "ON_DELIVERY",
+      "payment_status": "PARTIAL"
+    }
+  ]
+}</code></pre>
+
+<p><strong>Response fieldlari:</strong></p>
+<table>
+<thead><tr><th>Field</th><th>Tip</th><th>Izoh</th></tr></thead>
+<tbody>
+<tr><td><code>count</code></td><td>number</td><td>Jami qatorlar soni</td></tr>
+<tr><td><code>totals.qty</code></td><td>number</td><td>Jami chiqarilgan miqdor</td></tr>
+<tr><td><code>totals.total_sell</code></td><td>number</td><td>Jami sotish summasi (so'm)</td></tr>
+<tr><td><code>totals.profit</code></td><td>number</td><td>Jami foyda (so'm)</td></tr>
+<tr><td><code>results[].client</code></td><td>string</td><td>Mijoz nomi</td></tr>
+<tr><td><code>results[].product</code></td><td>string</td><td>Mahsulot nomi</td></tr>
+<tr><td><code>results[].qty</code></td><td>number</td><td>Chiqarilgan miqdor</td></tr>
+<tr><td><code>results[].unit_cost</code></td><td>number</td><td>Tan narxi — 1 dona (so'm)</td></tr>
+<tr><td><code>results[].unit_price</code></td><td>number</td><td>Sotish narxi — 1 dona (so'm)</td></tr>
+<tr><td><code>results[].total_sell</code></td><td>number</td><td><code>qty × unit_price</code></td></tr>
+<tr><td><code>results[].profit</code></td><td>number</td><td><code>qty × (unit_price − unit_cost)</code></td></tr>
+<tr><td><code>results[].order_status</code></td><td>string</td><td>Buyurtma holati</td></tr>
+<tr><td><code>results[].payment_status</code></td><td>string</td><td>To'lov holati</td></tr>
+</tbody>
+</table>
+
+<hr />
+<h3 id="716-chiqarilgan-mahsulotlar-hisoboti-xlsx">7.16 Chiqarilgan mahsulotlar hisoboti (Shipments Export — XLSX)</h3>
+<p>Aynan <strong>7.15</strong> dagi filterlar bilan XLSX formatda yuklab olish. Filterlar bir xil — natija ham bir xil.</p>
+<pre class="codehilite"><code>GET /api/v1/orders/shipments/export/</code></pre>
+
+<p><strong>Misol so'rovlar:</strong></p>
+<pre class="codehilite"><code>GET /api/v1/orders/shipments/export/?date=2026-03-31
+GET /api/v1/orders/shipments/export/?date_from=2026-03-01&amp;date_to=2026-03-31
+GET /api/v1/orders/shipments/export/?status=DELIVERED&amp;payment_status=PAID
+GET /api/v1/orders/shipments/export/?payment_method=CASH&amp;date_from=2026-03-01&amp;date_to=2026-03-31</code></pre>
+
+<p><strong>Response <code>200 OK</code>:</strong></p>
+<ul>
+<li><code>Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</code></li>
+<li><code>Content-Disposition: attachment; filename="shipments_2026-03-01__2026-03-31.xlsx"</code></li>
+<li>Body: binary <code>.xlsx</code> fayl</li>
+</ul>
+
+<p><strong>Fayl nomi formati:</strong></p>
+<table>
+<thead><tr><th>Filter</th><th>Fayl nomi</th></tr></thead>
+<tbody>
+<tr><td><code>?date=2026-03-31</code></td><td><code>shipments_2026-03-31.xlsx</code></td></tr>
+<tr><td><code>?date_from=2026-03-01&amp;date_to=2026-03-31</code></td><td><code>shipments_2026-03-01__2026-03-31.xlsx</code></td></tr>
+<tr><td>Filtersiz</td><td><code>shipments.xlsx</code></td></tr>
+</tbody>
+</table>
+
+<p><strong>XLSX ustunlari:</strong></p>
+<table>
+<thead><tr><th>Ustun</th><th>Ma'nosi</th></tr></thead>
+<tbody>
+<tr><td>Mijoz</td><td>Mijoz nomi</td></tr>
+<tr><td>Mahsulot</td><td>Mahsulot nomi</td></tr>
+<tr><td>Miqdor</td><td>Chiqarilgan miqdor</td></tr>
+<tr><td>Tan narxi</td><td>1 dona narxi (so'm)</td></tr>
+<tr><td>Sotish narxi</td><td>1 dona sotish narxi (so'm)</td></tr>
+<tr><td>Umumiy summa</td><td><code>qty × sotish_narxi</code></td></tr>
+<tr><td>Foyda</td><td><code>qty × (sotish_narxi − tan_narxi)</code></td></tr>
+</tbody>
+</table>
+<blockquote><p>1-qator: sarlavha (sana oralig'i ko'rsatiladi). Oxirgi qator: <strong>JAMI</strong> (miqdor, umumiy summa, foyda yig'indisi). Foyda manfiy bo'lsa qizil, musbat bo'lsa yashil rang bilan belgilanadi.</p></blockquote>
+
+<p><strong>Frontend uchun yuklab olish misoli (JavaScript):</strong></p>
+<pre class="codehilite"><code class="language-javascript">async function downloadShipments(filters) {
+  const params = new URLSearchParams()
+  Object.entries(filters).forEach(([k, v]) =&gt; { if (v) params.set(k, v) })
+
+  const res = await fetch(`/api/v1/orders/shipments/export/?${params}`, {
+    headers: { 'Authorization': `Bearer ${accessToken}` }
+  })
+  const blob = await res.blob()
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = 'shipments.xlsx'
+  a.click()
+  URL.revokeObjectURL(url)
+}</code></pre>
+
+<hr />
+<h2 id="8-warehouse-ombor">8. WAREHOUSE (Ombor)</h2>
+<p><strong>Base:</strong> <code>/api/v1/warehouse/</code></p>
+<hr />
+<h3 id="81-ombor-holati-stock-on-hand">8.1 Ombor Holati (Stock On-Hand)</h3>
+<pre class="codehilite"><code>GET /api/v1/warehouse/stock/
+</code></pre>
+
+<p><strong>Query parametrlar:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parametr</th>
+<th>Turi</th>
+<th>Qiymatlar</th>
+<th>Tavsif</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>item_type</code></td>
+<td>string</td>
+<td><code>RAW_MATERIAL</code>, <code>FINISHED_PRODUCT</code></td>
+<td>Mahsulot turi</td>
+</tr>
+<tr>
+<td><code>location</code></td>
+<td>int</td>
+<td>—</td>
+<td>Lokatsiya ID</td>
+</tr>
+<tr>
+<td><code>q</code></td>
+<td>string</td>
+<td>—</td>
+<td>Nom bo'yicha qidiruv</td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>int</td>
+<td>—</td>
+<td>Sahifa</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response 200:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;count&quot;: 20,
+  &quot;results&quot;: [
+    {
+      &quot;item_type&quot;: &quot;RAW_MATERIAL&quot;,
+      &quot;location&quot;: 1,
+      &quot;location_name&quot;: &quot;Asosiy ombor&quot;,
+      &quot;product&quot;: null,
+      &quot;product_name&quot;: null,
+      &quot;raw_material&quot;: 2,
+      &quot;raw_material_name&quot;: &quot;Loy&quot;,
+      &quot;total_qty&quot;: &quot;450.000000&quot;,
+      &quot;reserved_qty&quot;: &quot;50.000000&quot;,
+      &quot;available_qty&quot;: &quot;400.000000&quot;,
+      &quot;balance_qty&quot;: &quot;400.000000&quot;,
+      &quot;avg_unit_cost&quot;: 5200,
+      &quot;currency&quot;: &quot;UZS&quot;
+    }
+  ]
+}
+</code></pre>
+
+<blockquote>
+<p><code>available_qty = total_qty - reserved_qty</code></p>
+</blockquote>
+<hr />
+<h3 id="82-stock-meta">8.2 Stock Meta</h3>
+<pre class="codehilite"><code>GET /api/v1/warehouse/stock/meta/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{
+  &quot;item_type_choices&quot;: [ {&quot;value&quot;: &quot;RAW_MATERIAL&quot;, &quot;label&quot;: &quot;...&quot;}, ... ],
+  &quot;movement_type_choices&quot;: [ {&quot;value&quot;: &quot;IN&quot;, &quot;label&quot;: &quot;...&quot;}, ... ]
+}
+</code></pre>
+
+<hr />
+<h3 id="83-kirim-receipt">8.3 Kirim (Receipt)</h3>
+<pre class="codehilite"><code>POST /api/v1/warehouse/stock/receipt/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{
+  &quot;location&quot;: 1,
+  &quot;item_type&quot;: &quot;RAW_MATERIAL&quot;,
+  &quot;item_id&quot;: 5,
+  &quot;qty&quot;: &quot;100.000000&quot;,
+  &quot;unit_cost&quot;: 18000,
+  &quot;note&quot;: &quot;Manual kirim&quot;
+}
+</code></pre>
+
+<hr />
+<h3 id="84-chiqim-issue">8.4 Chiqim (Issue)</h3>
+<pre class="codehilite"><code>POST /api/v1/warehouse/stock/issue/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{
+  &quot;location&quot;: 1,
+  &quot;item_type&quot;: &quot;FINISHED_PRODUCT&quot;,
+  &quot;item_id&quot;: 3,
+  &quot;qty&quot;: &quot;20.000000&quot;,
+  &quot;note&quot;: &quot;Manual chiqim&quot;
+}
+</code></pre>
+
+<hr />
+<h3 id="85-transfer-lokatsiyalar-ortasida">8.5 Transfer (Lokatsiyalar o'rtasida)</h3>
+<pre class="codehilite"><code>POST /api/v1/warehouse/stock/transfer/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{
+  &quot;from_location&quot;: 1,
+  &quot;to_location&quot;: 2,
+  &quot;item_type&quot;: &quot;FINISHED_PRODUCT&quot;,
+  &quot;item_id&quot;: 10,
+  &quot;qty&quot;: &quot;5.000000&quot;,
+  &quot;note&quot;: &quot;Filial omboriga&quot;
+}
+</code></pre>
+
+<hr />
+<h3 id="86-qaytarish-return">8.6 Qaytarish (Return)</h3>
+<pre class="codehilite"><code>POST /api/v1/warehouse/stock/return/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{
+  &quot;location&quot;: 1,
+  &quot;item_type&quot;: &quot;RAW_MATERIAL&quot;,
+  &quot;item_id&quot;: 5,
+  &quot;qty&quot;: &quot;10.000000&quot;,
+  &quot;note&quot;: &quot;Supplier qaytarish&quot;
+}
+</code></pre>
+
+<hr />
+<h3 id="87-chiqindi-waste">8.7 Chiqindi (Waste)</h3>
+<pre class="codehilite"><code>POST /api/v1/warehouse/stock/waste/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{
+  &quot;location&quot;: 1,
+  &quot;item_type&quot;: &quot;RAW_MATERIAL&quot;,
+  &quot;item_id&quot;: 5,
+  &quot;qty&quot;: &quot;3.000000&quot;,
+  &quot;note&quot;: &quot;Buzilib ketdi&quot;
+}
+</code></pre>
+
+<hr />
+<h3 id="88-inventarizatsiya-tuzatish-adjust">8.8 Inventarizatsiya tuzatish (Adjust)</h3>
+<pre class="codehilite"><code>POST /api/v1/warehouse/stock/adjust/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{
+  &quot;location&quot;: 1,
+  &quot;item_type&quot;: &quot;RAW_MATERIAL&quot;,
+  &quot;item_id&quot;: 5,
+  &quot;qty&quot;: &quot;5.000000&quot;,
+  &quot;note&quot;: &quot;Inventarizatsiya: 5 dona kam topildi (manfiy bo'lsa -5.000000)&quot;
+}
+</code></pre>
+
+<hr />
+<h3 id="89-ombor-jurnali-ledger">8.9 Ombor Jurnali (Ledger)</h3>
+<pre class="codehilite"><code>GET /api/v1/warehouse/ledger/
+</code></pre>
+
+<p><strong>Query parametrlar:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parametr</th>
+<th>Turi</th>
+<th>Tavsif</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>item_type</code></td>
+<td>string</td>
+<td><code>RAW_MATERIAL</code> yoki <code>FINISHED_PRODUCT</code></td>
+</tr>
+<tr>
+<td><code>movement_type</code></td>
+<td>string</td>
+<td><code>IN</code>, <code>OUT</code>, <code>WASTE</code>, <code>ADJUST</code>, <code>RETURN</code></td>
+</tr>
+<tr>
+<td><code>location</code></td>
+<td>int</td>
+<td>Lokatsiya ID</td>
+</tr>
+<tr>
+<td><code>ref_type</code></td>
+<td>string</td>
+<td><code>PURCHASE</code>, <code>ORDER</code>, <code>PRODUCTION</code> va h.k.</td>
+</tr>
+<tr>
+<td><code>date_from</code></td>
+<td>date</td>
+<td><code>YYYY-MM-DD</code></td>
+</tr>
+<tr>
+<td><code>date_to</code></td>
+<td>date</td>
+<td><code>YYYY-MM-DD</code></td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>int</td>
+<td>Sahifa</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response 200:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;count&quot;: 500,
+  &quot;results&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;item_type&quot;: &quot;RAW_MATERIAL&quot;,
+      &quot;raw_material_name&quot;: &quot;Loy&quot;,
+      &quot;product_name&quot;: null,
+      &quot;location_name&quot;: &quot;Asosiy ombor&quot;,
+      &quot;movement_type&quot;: &quot;IN&quot;,
+      &quot;qty&quot;: &quot;500.000000&quot;,
+      &quot;unit_cost&quot;: 5000,
+      &quot;total_cost&quot;: 2500000,
+      &quot;currency&quot;: &quot;UZS&quot;,
+      &quot;ref_type&quot;: &quot;PURCHASE&quot;,
+      &quot;ref_id&quot;: 10,
+      &quot;occurred_at&quot;: &quot;2026-03-07T10:00:00Z&quot;,
+      &quot;note&quot;: &quot;Purchase PUR-000010 (CONFIRM)&quot;
+    }
+  ]
+}
+</code></pre>
+
+<hr />
+<h3 id="810-ombor-umumiy-korinishi">8.10 Ombor Umumiy Ko'rinishi</h3>
+<pre class="codehilite"><code>GET /api/v1/warehouse/overview/
+</code></pre>
+
+<p>Bugungi kirim/chiqim summasi.</p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;today&quot;: &quot;2026-03-29&quot;,
+  &quot;movements_today&quot;: {
+    &quot;in_qty&quot;: &quot;1500.000000&quot;,
+    &quot;out_qty&quot;: &quot;320.000000&quot;
+  }
+}
+</code></pre>
+
+<hr />
+<h2 id="9-finance-moliya">9. FINANCE (Moliya)</h2>
+<p><strong>Base:</strong> <code>/api/v1/finance/</code></p>
+<hr />
+<h3 id="91-tolovlar-payments">9.1 To'lovlar (Payments)</h3>
+<p><strong>Base:</strong> <code>/api/v1/finance/payments/</code></p>
+<h4 id="tolovlar-royxati">To'lovlar ro'yxati</h4>
+<pre class="codehilite"><code>GET /api/v1/finance/payments/
+</code></pre>
+
+<p><strong>Query parametrlar:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parametr</th>
+<th>Turi</th>
+<th>Qiymatlar</th>
+<th>Tavsif</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ref_type</code></td>
+<td>string</td>
+<td><code>PURCHASE</code>, <code>ORDER</code>, <code>SALARY</code>, <code>ADVANCE</code>, <code>EXPENSE</code></td>
+<td>Manba turi</td>
+</tr>
+<tr>
+<td><code>ref_id</code></td>
+<td>int</td>
+<td>—</td>
+<td>Manba ID</td>
+</tr>
+<tr>
+<td><code>method</code></td>
+<td>string</td>
+<td><code>CASH</code>, <code>BANK_TRANSFER</code>, <code>CARD</code></td>
+<td>To'lov usuli</td>
+</tr>
+<tr>
+<td><code>currency</code></td>
+<td>string</td>
+<td><code>UZS</code></td>
+<td>Valyuta</td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>int</td>
+<td>—</td>
+<td>Sahifa</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response 200:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;count&quot;: 80,
+  &quot;results&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;ref_type&quot;: &quot;PURCHASE&quot;,
+      &quot;ref_id&quot;: 10,
+      &quot;method&quot;: &quot;CASH&quot;,
+      &quot;amount&quot;: 3000000,
+      &quot;currency&quot;: &quot;UZS&quot;,
+      &quot;note&quot;: &quot;Mart oyi avans&quot;,
+      &quot;paid_at&quot;: &quot;2026-03-05T00:00:00Z&quot;,
+      &quot;created_at&quot;: &quot;2026-03-05T09:00:00Z&quot;,
+      &quot;updated_at&quot;: &quot;2026-03-05T09:00:00Z&quot;
+    }
+  ]
+}
+</code></pre>
+
+<hr />
+<h4 id="buyurtma-tolovi">Buyurtma to'lovi</h4>
+<pre class="codehilite"><code>POST /api/v1/finance/payments/order/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{
+  &quot;order_id&quot;: 12,
+  &quot;method&quot;: &quot;CASH&quot;,
+  &quot;amount&quot;: 500000,
+  &quot;occurred_on&quot;: &quot;2026-03-15&quot;,
+  &quot;note&quot;: &quot;Avans to'lov&quot;
+}
+</code></pre>
+
+<p><strong>Response 201:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;payment&quot;: { &quot;id&quot;: 5, &quot;ref_type&quot;: &quot;ORDER&quot;, &quot;ref_id&quot;: 12, &quot;method&quot;: &quot;CASH&quot;, &quot;amount&quot;: 500000, ... },
+  &quot;order&quot;: { &quot;id&quot;: 12, &quot;paid_amount&quot;: 500000, &quot;payment_status&quot;: &quot;PARTIAL&quot; }
+}
+</code></pre>
+
+<hr />
+<h4 id="xarid-tolovi">Xarid to'lovi</h4>
+<pre class="codehilite"><code>POST /api/v1/finance/payments/purchase/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{
+  &quot;purchase_id&quot;: 21,
+  &quot;method&quot;: &quot;BANK_TRANSFER&quot;,
+  &quot;amount&quot;: 2000000,
+  &quot;occurred_on&quot;: &quot;2026-03-10&quot;,
+  &quot;note&quot;: &quot;Xom ashyo uchun&quot;
+}
+</code></pre>
+
+<p><strong>Response 201:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;payment&quot;: { ... },
+  &quot;purchase&quot;: { &quot;id&quot;: 21, &quot;paid_amount&quot;: 2000000, &quot;payment_status&quot;: &quot;PARTIAL&quot; }
+}
+</code></pre>
+
+<hr />
+<h4 id="oylik-tolash">Oylik to'lash</h4>
+<pre class="codehilite"><code>POST /api/v1/finance/payments/salary/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{
+  &quot;employee_id&quot;: 7,
+  &quot;method&quot;: &quot;CASH&quot;,
+  &quot;amount&quot;: 2500000,
+  &quot;bonus&quot;: 500000,
+  &quot;occurred_on&quot;: &quot;2026-03-25&quot;,
+  &quot;note&quot;: &quot;Mart oyligi + mukofot&quot;
+}
+</code></pre>
+
+<blockquote>
+<p>Bir oy ichida faqat BIR MARTA oylik to'lash mumkin
+<code>bonus</code> ixtiyoriy (qo'shimcha mukofot)</p>
+</blockquote>
+<p><strong>Response 201:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;payment&quot;: { ... },
+  &quot;employee&quot;: { &quot;id&quot;: 7, &quot;full_name&quot;: &quot;Jasur Toshmatov&quot; },
+  &quot;bonus&quot;: 500000,
+  &quot;total_paid&quot;: 3000000
+}
+</code></pre>
+
+<hr />
+<h4 id="avans-berish">Avans berish</h4>
+<pre class="codehilite"><code>POST /api/v1/finance/payments/advance/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{
+  &quot;employee_id&quot;: 7,
+  &quot;method&quot;: &quot;CASH&quot;,
+  &quot;amount&quot;: 1000000,
+  &quot;occurred_on&quot;: &quot;2026-03-10&quot;,
+  &quot;note&quot;: &quot;Mart oyi avans&quot;
+}
+</code></pre>
+
+<p><strong>Response 201:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;payment&quot;: { ... },
+  &quot;employee&quot;: { &quot;id&quot;: 7, &quot;full_name&quot;: &quot;Jasur Toshmatov&quot; },
+  &quot;advance_total_this_month&quot;: 1000000
+}
+</code></pre>
+
+<hr />
+<h4 id="umumiy-xarajat">Umumiy xarajat</h4>
+<pre class="codehilite"><code>POST /api/v1/finance/payments/expense/
+</code></pre>
+
+<p><strong>category qiymatlari:</strong> <code>UTILITIES</code> | <code>RENT</code> | <code>TRANSPORT</code> | <code>REPAIR</code> | <code>TAX</code> | <code>MARKETING</code> | <code>OFFICE</code> | <code>OTHER</code></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;category&quot;: &quot;UTILITIES&quot;,
+  &quot;method&quot;: &quot;BANK_TRANSFER&quot;,
+  &quot;amount&quot;: 850000,
+  &quot;occurred_on&quot;: &quot;2026-03-28&quot;,
+  &quot;note&quot;: &quot;Mart oyi elektr to'lovi&quot;
+}
+</code></pre>
+
+<p><strong>Response 201:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;payment&quot;: { ... },
+  &quot;category&quot;: &quot;UTILITIES&quot;,
+  &quot;amount&quot;: 850000
+}
+</code></pre>
+
+<hr />
+<h4 id="tolovni-yangilash">To'lovni yangilash</h4>
+<pre class="codehilite"><code>PATCH /api/v1/finance/payments/{id}/
+</code></pre>
+
+<pre class="codehilite"><code class="language-json">{
+  &quot;amount&quot;: 1200000,
+  &quot;note&quot;: &quot;Yangilangan summa&quot;,
+  &quot;method&quot;: &quot;CARD&quot;,
+  &quot;paid_at&quot;: &quot;2026-03-10&quot;
+}
+</code></pre>
+
+<blockquote>
+<p><code>amount</code> o'zgarganda bog'liq Order/Purchase va FinanceLedger avtomatik sync bo'ladi</p>
+</blockquote>
+<hr />
+<h4 id="tolovni-ochirish">To'lovni o'chirish</h4>
+<pre class="codehilite"><code>DELETE /api/v1/finance/payments/{id}/
+</code></pre>
+
+<blockquote>
+<p>Soft delete. Bog'liq Order/Purchase paid_amount avtomatik qayta hisoblanadi.</p>
+</blockquote>
+<hr />
+<h3 id="92-moliya-jurnali-ledger">9.2 Moliya Jurnali (Ledger)</h3>
+<p><strong>Base:</strong> <code>/api/v1/finance/ledger/</code></p>
+<h4 id="royxat">Ro'yxat</h4>
+<pre class="codehilite"><code>GET /api/v1/finance/ledger/
+</code></pre>
+
+<p><strong>Query parametrlar:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parametr</th>
+<th>Turi</th>
+<th>Qiymatlar</th>
+<th>Tavsif</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>search</code></td>
+<td>string</td>
+<td>—</td>
+<td>category, note bo'yicha</td>
+</tr>
+<tr>
+<td><code>entry_type</code></td>
+<td>string</td>
+<td><code>INCOME</code>, <code>EXPENSE</code>, <code>ADJUSTMENT</code></td>
+<td>Yozuv turi</td>
+</tr>
+<tr>
+<td><code>currency</code></td>
+<td>string</td>
+<td><code>UZS</code></td>
+<td>Valyuta</td>
+</tr>
+<tr>
+<td><code>method</code></td>
+<td>string</td>
+<td><code>CASH</code>, <code>BANK_TRANSFER</code>, <code>CARD</code></td>
+<td>To'lov usuli</td>
+</tr>
+<tr>
+<td><code>ref_type</code></td>
+<td>string</td>
+<td><code>ORDER</code>, <code>PURCHASE</code>, <code>SALARY</code>, <code>ADVANCE</code>, <code>EXPENSE</code></td>
+<td>Manba turi</td>
+</tr>
+<tr>
+<td><code>ref_id</code></td>
+<td>int</td>
+<td>—</td>
+<td>Manba ID</td>
+</tr>
+<tr>
+<td><code>date_from</code></td>
+<td>date</td>
+<td><code>YYYY-MM-DD</code></td>
+<td>occurred_on dan</td>
+</tr>
+<tr>
+<td><code>date_to</code></td>
+<td>date</td>
+<td><code>YYYY-MM-DD</code></td>
+<td>occurred_on gacha</td>
+</tr>
+<tr>
+<td><code>ordering</code></td>
+<td>string</td>
+<td><code>occurred_on</code>, <code>-occurred_on</code>, <code>amount</code>, <code>-amount</code></td>
+<td>Tartib</td>
+</tr>
+<tr>
+<td><code>page</code></td>
+<td>int</td>
+<td>—</td>
+<td>Sahifa</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response 200:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;count&quot;: 200,
+  &quot;results&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;entry_type&quot;: &quot;INCOME&quot;,
+      &quot;category&quot;: &quot;SALES_INCOME&quot;,
+      &quot;amount&quot;: 2688000,
+      &quot;currency&quot;: &quot;UZS&quot;,
+      &quot;method&quot;: &quot;CASH&quot;,
+      &quot;occurred_on&quot;: &quot;2026-03-15&quot;,
+      &quot;ref_type&quot;: &quot;ORDER&quot;,
+      &quot;ref_id&quot;: 12,
+      &quot;note&quot;: &quot;Order ORD-000012&quot;,
+      &quot;created_at&quot;: &quot;2026-03-15T10:00:00Z&quot;
+    }
+  ]
+}
+</code></pre>
+
+<h4 id="detail">Detail</h4>
+<pre class="codehilite"><code>GET /api/v1/finance/ledger/{id}/
+</code></pre>
+
+<hr />
+<h3 id="93-moliya-dashboard">9.3 Moliya Dashboard</h3>
+<pre class="codehilite"><code>GET /api/v1/finance/dashboard/summary/
+</code></pre>
+
+<p><strong>Query parametrlar:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parametr</th>
+<th>Turi</th>
+<th>Tavsif</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>date_from</code></td>
+<td>date</td>
+<td><code>YYYY-MM-DD</code></td>
+</tr>
+<tr>
+<td><code>date_to</code></td>
+<td>date</td>
+<td><code>YYYY-MM-DD</code></td>
+</tr>
+<tr>
+<td><code>currency</code></td>
+<td>string</td>
+<td>Default: <code>UZS</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response 200:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;currency&quot;: &quot;UZS&quot;,
+  &quot;range&quot;: { &quot;date_from&quot;: &quot;2026-03-01&quot;, &quot;date_to&quot;: &quot;2026-03-31&quot; },
+  &quot;income_total&quot;: 15000000,
+  &quot;expense_total&quot;: 8000000,
+  &quot;adjustment_total&quot;: 0,
+  &quot;net&quot;: 7000000,
+  &quot;top_categories&quot;: [
+    { &quot;entry_type&quot;: &quot;INCOME&quot;, &quot;category&quot;: &quot;SALES_INCOME&quot;, &quot;total&quot;: 12000000 },
+    { &quot;entry_type&quot;: &quot;EXPENSE&quot;, &quot;category&quot;: &quot;SALARY&quot;, &quot;total&quot;: 5000000 }
+  ]
+}
+</code></pre>
+
+<hr />
+<h2 id="10-dashboard-boshqaruv-paneli">10. DASHBOARD (Boshqaruv Paneli)</h2>
+<p><strong>Base:</strong> <code>/api/v1/dashboard/</code></p>
+<hr />
+<h3 id="101-umumiy-kpi-overview">10.1 Umumiy KPI (Overview)</h3>
+<pre class="codehilite"><code>GET /api/v1/dashboard/overview/summary/
+</code></pre>
+
+<p><strong>Query parametrlar:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parametr</th>
+<th>Turi</th>
+<th>Tavsif</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>date_from</code></td>
+<td>date</td>
+<td><code>YYYY-MM-DD</code></td>
+</tr>
+<tr>
+<td><code>date_to</code></td>
+<td>date</td>
+<td><code>YYYY-MM-DD</code></td>
+</tr>
+<tr>
+<td><code>currency</code></td>
+<td>string</td>
+<td>Default: <code>UZS</code></td>
+</tr>
+<tr>
+<td><code>location_id</code></td>
+<td>int</td>
+<td>Ombor lokatsiyasi (ixtiyoriy)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response 200:</strong></p>
+<pre class="codehilite"><code class="language-json">{
+  &quot;currency&quot;: &quot;UZS&quot;,
+  &quot;range&quot;: { &quot;date_from&quot;: &quot;2026-03-01&quot;, &quot;date_to&quot;: &quot;2026-03-31&quot; },
+  &quot;sales&quot;: {
+    &quot;total&quot;: 25000000,
+    &quot;paid&quot;: 18000000,
+    &quot;unpaid_count&quot;: 3,
+    &quot;partial_count&quot;: 5
+  },
+  &quot;purchases&quot;: {
+    &quot;total&quot;: 12000000,
+    &quot;paid&quot;: 10000000
+  },
+  &quot;finance&quot;: {
+    &quot;income&quot;: 18000000,
+    &quot;expense&quot;: 12000000,
+    &quot;net&quot;: 6000000
+  },
+  &quot;warehouse&quot;: {
+    &quot;in_qty&quot;: &quot;5000.000000&quot;,
+    &quot;out_qty&quot;: &quot;3200.000000&quot;
+  }
+}
+</code></pre>
+
+<hr />
+<h3 id="102-sotuv-kpi">10.2 Sotuv KPI</h3>
+<pre class="codehilite"><code>GET /api/v1/dashboard/sales/kpi/
+</code></pre>
+
+<p><strong>Query parametrlar:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parametr</th>
+<th>Turi</th>
+<th>Qiymatlar</th>
+<th>Tavsif</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>date_from</code></td>
+<td>date</td>
+<td><code>YYYY-MM-DD</code></td>
+<td>Boshlanish sana</td>
+</tr>
+<tr>
+<td><code>date_to</code></td>
+<td>date</td>
+<td><code>YYYY-MM-DD</code></td>
+<td>Tugash sana</td>
+</tr>
+<tr>
+<td><code>currency</code></td>
+<td>string</td>
+<td><code>UZS</code></td>
+<td>Valyuta</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response 200:</strong> Sotuv bo'yicha statistika</p>
+<hr />
+<h3 id="103-sotuv-rentabelligi">10.3 Sotuv Rentabelligi</h3>
+<pre class="codehilite"><code>GET /api/v1/dashboard/sales/profitability/
+</code></pre>
+
+<p><strong>Query parametrlar:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Parametr</th>
+<th>Turi</th>
+<th>Qiymatlar</th>
+<th>Tavsif</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>period</code></td>
+<td>string</td>
+<td><code>daily</code>, <code>weekly</code>, <code>monthly</code>, <code>yearly</code>, <code>custom</code></td>
+<td>Davr</td>
+</tr>
+<tr>
+<td><code>anchor_date</code></td>
+<td>date</td>
+<td><code>YYYY-MM-DD</code></td>
+<td>Hisob-kitob sanasi</td>
+</tr>
+<tr>
+<td><code>date_from</code></td>
+<td>date</td>
+<td><code>YYYY-MM-DD</code></td>
+<td>Custom uchun</td>
+</tr>
+<tr>
+<td><code>date_to</code></td>
+<td>date</td>
+<td><code>YYYY-MM-DD</code></td>
+<td>Custom uchun</td>
+</tr>
+<tr>
+<td><code>status_scope</code></td>
+<td>string</td>
+<td><code>delivered</code>, <code>delivered_and_on_delivery</code></td>
+<td>Qaysi statuslar</td>
+</tr>
+<tr>
+<td><code>currency</code></td>
+<td>string</td>
+<td><code>UZS</code></td>
+<td>Valyuta</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Response 200:</strong> Har bir mahsulot bo'yicha daromad, xarajat, foyda</p>
+<hr />
+<h3 id="104-ombor-dashboard">10.4 Ombor Dashboard</h3>
+<pre class="codehilite"><code>GET /api/v1/dashboard/warehouse/
+</code></pre>
+
+<hr />
+<h2 id="qisqacha-umumiy-jadval">QISQACHA UMUMIY JADVAL</h2>
+<table>
+<thead>
+<tr>
+<th>Bo'lim</th>
+<th>Base URL</th>
+<th>Asosiy amallar</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Auth</td>
+<td><code>/api/v1/accounts/</code></td>
+<td>login, refresh, me, change-password, logout</td>
+</tr>
+<tr>
+<td>Dicts</td>
+<td><code>/api/v1/dicts/</code></td>
+<td>uom, material-types, product-categories, locations</td>
+</tr>
+<tr>
+<td>Partners</td>
+<td><code>/api/v1/partners/</code></td>
+<td>kontragents, employees</td>
+</tr>
+<tr>
+<td>Catalog</td>
+<td><code>/api/v1/catalog/</code></td>
+<td>materials, products, recipes</td>
+</tr>
+<tr>
+<td>Purchases</td>
+<td><code>/api/v1/purchases/</code></td>
+<td>CRUD, items, confirm, cancel, export, meta</td>
+</tr>
+<tr>
+<td>Production</td>
+<td><code>/api/v1/production/</code></td>
+<td>CRUD, preview, confirm, start, done, cancel</td>
+</tr>
+<tr>
+<td>Orders</td>
+<td><code>/api/v1/orders/</code></td>
+<td>CRUD, items, confirm, reserve, ship, deliver, return, cancel</td>
+</tr>
+<tr>
+<td>Warehouse</td>
+<td><code>/api/v1/warehouse/</code></td>
+<td>stock (on-hand, receipt, issue, transfer, waste, adjust), ledger</td>
+</tr>
+<tr>
+<td>Finance</td>
+<td><code>/api/v1/finance/</code></td>
+<td>payments (order/purchase/salary/advance/expense), ledger, dashboard</td>
+</tr>
+<tr>
+<td>Dashboard</td>
+<td><code>/api/v1/dashboard/</code></td>
+<td>overview, sales, finance, warehouse</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="frontend-uchun-muhim-eslatmalar">FRONTEND UCHUN MUHIM ESLATMALAR</h2>
+<h3 id="1-token-boshqaruvi">1. Token boshqaruvi</h3>
+<pre class="codehilite"><code class="language-javascript">// Har so'rovda header qo'shish
+axios.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+
+// 401 xato bo'lsa token yangilash
+if (error.response.status === 401) {
+  const { data } = await axios.post('/api/v1/accounts/token/refresh/', { refresh: refreshToken });
+  // Yangi access tokenni saqlash va so'rovni qayta yuborish
+}
+</code></pre>
+
+<h3 id="2-pagination">2. Pagination</h3>
+<pre class="codehilite"><code class="language-javascript">// Barcha sahifalarni yuklash emas, scroll yoki pagination component ishlatish
+const { count, next, previous, results } = response.data;
+</code></pre>
+
+<h3 id="3-pul-miqdorlari">3. Pul miqdorlari</h3>
+<blockquote>
+<p>Barcha narxlar <strong>butun son</strong> (integer) sifatida keladi va yuboriladi.
+Masalan: <code>15000</code> = 15 000 so'm</p>
+</blockquote>
+<h3 id="4-miqdorlar-qty">4. Miqdorlar (Qty)</h3>
+<blockquote>
+<p>Barcha miqdorlar <strong>6 kasrli string</strong> sifatida keladi va yuboriladi.
+Masalan: <code>"500.000000"</code> = 500 ta</p>
+</blockquote>
+<h3 id="5-sanalar">5. Sanalar</h3>
+<blockquote>
+<p>Sanalar <code>YYYY-MM-DD</code> formatida: <code>"2026-03-15"</code>
+DateTime lar ISO 8601: <code>"2026-03-15T10:30:00Z"</code></p>
+</blockquote>
+<h3 id="6-soft-delete">6. Soft Delete</h3>
+<blockquote>
+<p>O'chirilgan yozuvlar ro'yxatda ko'rinmaydi (filter avtomatik ishlaydi).</p>
+</blockquote>
+<h3 id="7-enum-qiymatlarni-olish">7. Enum qiymatlarni olish</h3>
+<blockquote>
+<p>Dropdown (select) uchun <code>/purchases/meta/</code> yoki <code>/warehouse/stock/meta/</code> endpointidan choices olish mumkin.</p>
+</blockquote>
+<h3 id="8-excel-export">8. Excel Export</h3>
+<pre class="codehilite"><code class="language-javascript">// Faylni yuklab olish
+const response = await axios.get(`/api/v1/purchases/${id}/export/`, {
+  responseType: 'blob',
+  headers: { Authorization: `Bearer ${token}` }
+});
+const url = window.URL.createObjectURL(new Blob([response.data]));
+const link = document.createElement('a');
+link.href = url;
+link.setAttribute('download', 'purchase.xlsx');
+document.body.appendChild(link);
+link.click();
+</code></pre>
+</body>
+</html>

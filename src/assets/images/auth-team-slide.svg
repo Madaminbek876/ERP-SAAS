@@ -1,0 +1,28 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="team-bg" x1="118" y1="84" x2="1084" y2="696" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#173763"/>
+      <stop offset="1" stop-color="#132142"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="760" rx="44" fill="url(#team-bg)"/>
+  <circle cx="980" cy="114" r="136" fill="#8F9EFF" fill-opacity="0.14"/>
+  <circle cx="142" cy="620" r="158" fill="#59C5FF" fill-opacity="0.12"/>
+  <rect x="176" y="120" width="848" height="516" rx="36" fill="white" fill-opacity="0.08" stroke="white" stroke-opacity="0.14" stroke-width="2"/>
+  <rect x="236" y="178" width="728" height="132" rx="30" fill="white" fill-opacity="0.08"/>
+  <rect x="274" y="216" width="164" height="18" rx="9" fill="white" fill-opacity="0.68"/>
+  <rect x="274" y="254" width="328" height="14" rx="7" fill="white" fill-opacity="0.2"/>
+  <circle cx="792" cy="244" r="40" fill="#59C5FF" fill-opacity="0.9"/>
+  <circle cx="858" cy="244" r="40" fill="#1CC58B" fill-opacity="0.92"/>
+  <circle cx="726" cy="244" r="40" fill="#4D68FF" fill-opacity="0.9"/>
+  <rect x="236" y="340" width="222" height="236" rx="30" fill="white" fill-opacity="0.08"/>
+  <circle cx="348" cy="420" r="52" fill="#59C5FF" fill-opacity="0.9"/>
+  <path d="M308 514C308 485.281 331.281 462 360 462H336C364.719 462 388 485.281 388 514V526H308V514Z" fill="#59C5FF" fill-opacity="0.9"/>
+  <rect x="508" y="340" width="456" height="236" rx="30" fill="white" fill-opacity="0.08"/>
+  <rect x="548" y="384" width="146" height="16" rx="8" fill="white" fill-opacity="0.7"/>
+  <rect x="548" y="424" width="180" height="14" rx="7" fill="white" fill-opacity="0.22"/>
+  <rect x="548" y="472" width="340" height="22" rx="11" fill="white" fill-opacity="0.1"/>
+  <rect x="548" y="512" width="282" height="22" rx="11" fill="white" fill-opacity="0.08"/>
+  <circle cx="864" cy="398" r="18" fill="#1CC58B"/>
+  <path d="M856 398L862 404L873 391" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
